@@ -86,57 +86,64 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-cart-check me-2"></i>POS KASIR
-            </a>
+   <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-cart-check me-2"></i>POS KASIR
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item me-4">  <!-- Jarak kanan 4 unit -->
+                    <a class="nav-link" href="/pos">
+                        <i class="bi bi-cash-register me-2"></i>Kasir
+                    </a>
+                </li>
+                <li class="nav-item me-4">  <!-- Jarak kanan 4 unit -->
+                    <a class="nav-link" href="/products">
+                        <i class="bi bi-box-seam me-2"></i>Produk
+                    </a>
+                </li>
+                <li class="nav-item">  <!-- Item terakhir tidak perlu margin kanan -->
+                    <a class="nav-link" href="/transactions">
+                        <i class="bi bi-clock-history me-2"></i>Riwayat
+                    </a>
+                </li>
+            </ul>
             
-            <div class="text-center mt-4">
-    <a href="/admin-login" class="btn btn-outline-primary">
-        <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
-    </a>
-    <small class="d-block text-muted mt-2">Hanya untuk administrator</small>
-</div>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pos">
-                            <i class="bi bi-cash-register me-1"></i>Kasir
+            <!-- User Dropdown -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" 
+                        data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-1"></i>Kasir: Admin
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li class="dropdown-header">
+                        <small class="text-muted">Logged in as</small>
+                        <div class="fw-bold">Kasir Admin</div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="/admin-login">
+                            <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">
-                            <i class="bi bi-box-seam me-1"></i>Produk
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/transactions">
-                            <i class="bi bi-clock-history me-1"></i>Riwayat
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="/logout">
+                            <i class="bi bi-box-arrow-right me-2"></i>Logout
                         </a>
                     </li>
                 </ul>
-                
-                <!-- Di dalam navbar, cari bagian user dropdown -->
-<div class="d-flex align-items-center">
-    <span class="me-3 text-muted">
-        <i class="bi bi-person-circle me-1"></i>Kasir: Admin
-    </span>
-    
-    <!-- Ganti link logout yang lama dengan yang baru -->
-    <a href="/logout" class="btn btn-outline-danger btn-sm">
-        <i class="bi bi-box-arrow-right me-1"></i>Logout
-    </a>
-</div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Main Content -->
     <div class="container-fluid mt-4">
@@ -167,6 +174,19 @@
             document.getElementById('change-amount').textContent = formatRupiah(0);
         }
         
+        // Update time in navbar
+        function updateNavbarTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit'
+            });
+            const timeElements = document.querySelectorAll('.navbar-time');
+            timeElements.forEach(element => {
+                element.textContent = timeString;
+            });
+        }
+        
         // Event listener untuk DOM ready
         document.addEventListener('DOMContentLoaded', function() {
             // Inisialisasi tooltip Bootstrap
@@ -177,6 +197,10 @@
             
             // Hitung total awal
             calculateTotal();
+            
+            // Update time
+            updateNavbarTime();
+            setInterval(updateNavbarTime, 60000);
         });
     </script>
     
