@@ -3,22 +3,64 @@
 @section('title', 'Laporan')
 
 @section('content')
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-md-12">
         <h3>Laporan Transaksi</h3>
         <p class="text-muted">Lihat dan analisis data transaksi</p>
     </div>
 </div>
 
-<!-- Date Filter -->
-<div class="row mb-4">
+<!-- Report Type Buttons -->
+<div class="row mb-3">
     <div class="col-md-12">
         <div class="card dashboard-card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-2">
-                        <label class="form-label">Periode</label>
-                        <select class="form-select" id="reportPeriod">
+            <div class="card-body p-2">
+                <div class="row g-2 text-center">
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-cash-stack text-primary" style="font-size: 1rem;"></i>
+                            <h6 class="mb-0 mt-1">Laporan Harian</h6>
+                            <p class="text-muted small mb-1">Ringkasan harian</p>
+                            <button class="btn btn-outline-primary btn-sm btn-report-type" data-type="daily">
+                                Lihat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-calendar-week text-success" style="font-size: 1rem;"></i>
+                            <h6 class="mb-0 mt-1">Laporan Mingguan</h6>
+                            <p class="text-muted small mb-1">Analisis mingguan</p>
+                            <button class="btn btn-outline-success btn-sm btn-report-type" data-type="weekly">
+                                Lihat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-2 border rounded">
+                            <i class="bi bi-calendar-month text-warning" style="font-size: 1rem;"></i>
+                            <h6 class="mb-0 mt-1">Laporan Bulanan</h6>
+                            <p class="text-muted small mb-1">Laporan bulanan</p>
+                            <button class="btn btn-outline-warning btn-sm btn-report-type" data-type="monthly">
+                                Lihat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Date Filter -->
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card dashboard-card">
+            <div class="card-body p-3">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label small mb-1">Periode</label>
+                        <select class="form-select form-select-sm" id="reportPeriod">
                             <option value="today">Hari Ini</option>
                             <option value="yesterday">Kemarin</option>
                             <option value="week" selected>Minggu Ini</option>
@@ -26,17 +68,17 @@
                             <option value="custom">Kustom</option>
                         </select>
                     </div>
-                    <div class="col-md-3 mb-2" id="customDateRange" style="display: none;">
-                        <label class="form-label">Dari Tanggal</label>
-                        <input type="date" class="form-control">
+                    <div class="col-md-3" id="customDateRange" style="display: none;">
+                        <label class="form-label small mb-1">Dari Tanggal</label>
+                        <input type="date" class="form-control form-control-sm">
                     </div>
-                    <div class="col-md-3 mb-2" id="customDateRange2" style="display: none;">
-                        <label class="form-label">Sampai Tanggal</label>
-                        <input type="date" class="form-control">
+                    <div class="col-md-3" id="customDateRange2" style="display: none;">
+                        <label class="form-label small mb-1">Sampai Tanggal</label>
+                        <input type="date" class="form-control form-control-sm">
                     </div>
-                    <div class="col-md-3 mb-2 d-flex align-items-end">
-                        <button class="btn btn-admin w-100" id="generateReport">
-                            <i class="bi bi-arrow-clockwise me-2"></i>Generate Laporan
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-light btn-admin btn-sm w-100" id="generateReport">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Generate
                         </button>
                     </div>
                 </div>
@@ -45,107 +87,35 @@
     </div>
 </div>
 
-<!-- Summary Cards -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card dashboard-card stats-card-1">
-            <div class="card-body">
-                <h6 class="text-muted">Total Transaksi</h6>
-                <h3 class="mb-2">1,248</h3>
-                <small class="text-success">
-                    <i class="bi bi-arrow-up-right"></i> 8.3% vs periode lalu
-                </small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card dashboard-card stats-card-2">
-            <div class="card-body">
-                <h6 class="text-muted">Total Pendapatan</h6>
-                <h3 class="mb-2">RP 42.5 Jt</h3>
-                <small class="text-success">
-                    <i class="bi bi-arrow-up-right"></i> 12.5% vs periode lalu
-                </small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card dashboard-card stats-card-3">
-            <div class="card-body">
-                <h6 class="text-muted">Produk Terjual</h6>
-                <h3 class="mb-2">5,420</h3>
-                <small class="text-success">
-                    <i class="bi bi-arrow-up-right"></i> 15.2% vs periode lalu
-                </small>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card dashboard-card stats-card-4">
-            <div class="card-body">
-                <h6 class="text-muted">Rata-rata/Transaksi</h6>
-                <h3 class="mb-2">RP 34,118</h3>
-                <small class="text-success">
-                    <i class="bi bi-arrow-up-right"></i> 3.8% vs periode lalu
-                </small>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Charts -->
-<div class="row mb-4">
-    <div class="col-md-8">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5 class="mb-0">Trend Penjualan</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="salesChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card dashboard-card">
-            <div class="card-header">
-                <h5 class="mb-0">Metode Pembayaran</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="paymentChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Transactions Table -->
-<div class="row">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card dashboard-card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="bi bi-receipt me-2"></i>Data Transaksi
+            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                <h5 class="mb-0" style="font-size: 1rem;">
+                    <i class="bi bi-receipt me-1"></i>Data Transaksi
                 </h5>
                 <div>
-                    <button class="btn btn-outline-secondary btn-sm me-2" onclick="window.print()">
-                        <i class="bi bi-printer me-1"></i>Cetak
+                    <button class="btn btn-outline-secondary btn-sm me-1" onclick="window.print()">
+                        <i class="bi bi-printer"></i>
                     </button>
-                    <button class="btn btn-admin btn-sm">
-                        <i class="bi bi-download me-1"></i>Export Excel
+                    <button class="btn btn-outline-light btn-admin btn-sm">
+                        <i class="bi bi-download me-1"></i>Export
                     </button>
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-sm table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Invoice</th>
+                                <th class="ps-3">Invoice</th>
                                 <th>Tanggal</th>
                                 <th>Kasir</th>
                                 <th>Items</th>
                                 <th>Total</th>
                                 <th>Metode</th>
-                                <th>Aksi</th>
+                                <th class="pe-3">Aksi</th> <!-- PERBAIKAN DI SINI -->
                             </tr>
                         </thead>
                         <tbody>
@@ -156,18 +126,18 @@
                                 $methods = [
                                     ['bg-success', 'Tunai'],
                                     ['bg-primary', 'QRIS'],
-                                    ['bg-purple', 'Transfer']
+                                    ['bg-dark', 'Transfer']
                                 ];
                                 $method = $methods[array_rand($methods)];
                             @endphp
                             <tr>
-                                <td>
-                                    <strong>INV-2024-00{{ 130 - $i }}</strong>
+                                <td class="ps-3">
+                                    <strong class="small">INV-2024-00{{ 130 - $i }}</strong>
                                     <br><small class="text-muted">#T{{ 130 - $i }}</small>
                                 </td>
                                 <td>
-                                    {{ date('d/m/Y', strtotime("-$i days")) }}
-                                    <br><small>{{ date('H:i', strtotime("+$i hours")) }}</small>
+                                    <span class="small">{{ date('d/m/Y', strtotime("-$i days")) }}</span>
+                                    <br><small class="text-muted">{{ date('H:i', strtotime("+$i hours")) }}</small>
                                 </td>
                                 <td>
                                     <span class="badge bg-info">{{ $cashier }}</span>
@@ -176,14 +146,14 @@
                                     <span class="badge bg-secondary">{{ rand(1, 8) }} items</span>
                                 </td>
                                 <td>
-                                    <strong>RP {{ number_format(rand(10000, 200000), 0, ',', '.') }}</strong>
+                                    <strong class="small">RP {{ number_format(rand(10000, 200000), 0, ',', '.') }}</strong>
                                 </td>
                                 <td>
                                     <span class="badge {{ $method[0] }}">{{ $method[1] }}</span>
                                 </td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Detail
+                                <td class="pe-3">
+                                    <button class="btn btn-sm btn-outline-primary py-0 px-2">
+                                        <i class="bi bi-eye small"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -193,55 +163,139 @@
                 </div>
 
                 <!-- Pagination -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                <div class="p-2">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">‹</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">4</a></li>
+                            <li class="page-item"><a class="page-link" href="#">5</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">›</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Report Types -->
-<div class="row mt-4">
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-cash-stack text-primary" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                <h6>Laporan Harian</h6>
-                <p class="text-muted">Ringkasan transaksi harian</p>
-                <button class="btn btn-outline-primary btn-sm">Lihat</button>
+<!-- Compact Summary Cards -->
+<div class="row mb-3 g-2">
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-cart-check text-primary" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Total Transaksi</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">1,248</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 8.3%
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-calendar-week text-success" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                <h6>Laporan Mingguan</h6>
-                <p class="text-muted">Analisis mingguan</p>
-                <button class="btn btn-outline-primary btn-sm">Lihat</button>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-currency-dollar text-success" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Total Pendapatan</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">42.5 Jt</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 12.5%
+                            </small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-3">
-        <div class="card dashboard-card">
-            <div class="card-body text-center">
-                <i class="bi bi-calendar-month text-warning" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                <h6>Laporan Bulanan</h6>
-                <p class="text-muted">Laporan bulanan lengkap</p>
-                <button class="btn btn-outline-primary btn-sm">Lihat</button>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-box-seam text-warning" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Produk Terjual</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">5,420</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 15.2%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-graph-up-arrow text-info" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Rata-rata/Transaksi</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">34,118</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 3.8%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts - SAME HEIGHT -->
+<div class="row g-2">
+    <div class="col-md-8">
+        <div class="card dashboard-card h-100">
+            <div class="card-header py-2 px-3">
+                <h5 class="mb-0" style="font-size: 0.95rem;">Trend Penjualan</h5>
+            </div>
+            <div class="card-body p-2" style="min-height: 180px;">
+                <canvas id="salesChart" height="130"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card dashboard-card h-100">
+            <div class="card-header py-2 px-3">
+                <h5 class="mb-0" style="font-size: 0.95rem;">Metode Pembayaran</h5>
+            </div>
+            <div class="card-body p-2 d-flex align-items-center justify-content-center" style="min-height: 180px;">
+                <canvas id="paymentChart" height="130"></canvas>
             </div>
         </div>
     </div>
@@ -270,41 +324,74 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
                                 return 'RP ' + (value/1000000).toFixed(1) + ' jt';
+                            },
+                            font: {
+                                size: 9
                             }
+                        },
+                        grid: {
+                            display: true,
+                            drawBorder: false
                         }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 }
             }
         });
 
-        // Payment Chart
+        // Payment Chart - Transfer warna biru hitam (#212529)
         const paymentCtx = document.getElementById('paymentChart').getContext('2d');
         paymentChart = new Chart(paymentCtx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: ['Tunai', 'QRIS', 'Transfer'],
                 datasets: [{
                     data: [65, 25, 10],
                     backgroundColor: [
-                        '#28a745',
-                        '#007bff',
-                        '#6f42c1'
-                    ]
+                        '#28a745',    // Hijau untuk Tunai
+                        '#007bff',    // Biru untuk QRIS
+                        '#212529'     // Biru Hitam untuk Transfer
+                    ],
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            padding: 8,
+                            usePointStyle: true,
+                            font: {
+                                size: 9
+                            }
+                        }
                     }
-                }
+                },
+                cutout: '50%'
             }
         });
     });
@@ -330,14 +417,130 @@
         // Simulate loading
         const btn = this;
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Memproses...';
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Loading...';
         btn.disabled = true;
         
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.disabled = false;
             alert(`Laporan untuk periode ${period} berhasil dibuat!`);
-        }, 2000);
+        }, 1500);
+    });
+
+    // Report type buttons functionality
+    document.querySelectorAll('.btn-report-type').forEach(button => {
+        button.addEventListener('click', function() {
+            const reportType = this.getAttribute('data-type');
+            const periodSelect = document.getElementById('reportPeriod');
+            
+            switch(reportType) {
+                case 'daily':
+                    periodSelect.value = 'today';
+                    break;
+                case 'weekly':
+                    periodSelect.value = 'week';
+                    break;
+                case 'monthly':
+                    periodSelect.value = 'month';
+                    break;
+            }
+            
+            // Trigger change event to update custom date display
+            periodSelect.dispatchEvent(new Event('change'));
+            
+            // Simulate generating report
+            document.getElementById('generateReport').click();
+        });
     });
 </script>
+
+<style>
+.card.dashboard-card {
+    border: 1px solid #e0e0e0;
+    font-size: 0.85rem;
+}
+
+.card.dashboard-card .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0.5rem 1rem;
+}
+
+.card.dashboard-card .card-body {
+    padding: 0.75rem;
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25em 0.5em;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.form-control-sm, .form-select-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+h6 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.pagination-sm .page-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Make everything more compact */
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.mt-1 {
+    margin-top: 0.25rem !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+
+.ms-1 {
+    margin-left: 0.25rem !important;
+}
+
+.ms-2 {
+    margin-left: 0.5rem !important;
+}
+
+/* Charts equal height */
+.row.g-2 .card {
+    display: flex;
+    flex-direction: column;
+}
+
+.row.g-2 .card-body {
+    flex: 1;
+}
+
+/* Smaller chart styling */
+canvas {
+    max-height: 130px;
+    width: 100% !important;
+}
+
+/* Transfer badge color - Biru Hitam */
+.bg-dark {
+    background-color: #212529 !important;
+}
+</style>
 @endsection

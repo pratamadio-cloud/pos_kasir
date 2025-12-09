@@ -19,34 +19,173 @@
             --success-color: #28a745;
             --warning-color: #ffc107;
             --danger-color: #dc3545;
+            --sidebar-width: 250px;
+            --sidebar-collapsed: 70px;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
+            overflow-x: hidden;
         }
         
-        /* Navbar */
-        .navbar-admin {
-            background: linear-gradient(135deg, #2b2d42 0%, #1a1c2b 100%);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            min-height: 100vh;
+            background: linear-gradient(180deg, #2b2d42 0%, #1a1c2b 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        .navbar-brand {
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+        
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-brand {
+            color: white;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: white !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .navbar-brand .logo-icon {
-            font-size: 1.8rem;
+        .sidebar-brand .logo-icon {
             color: #4cc9f0;
-            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Sidebar Menu */
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 5px;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #4cc9f0;
+        }
+        
+        .nav-link.active {
+            color: white;
+            background: rgba(76, 201, 240, 0.2);
+            border-left-color: #4cc9f0;
+        }
+        
+        .nav-link i {
+            font-size: 1.2rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .nav-text {
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
         }
         
         /* Main Content */
         .main-content {
+            margin-left: var(--sidebar-width);
             padding: 20px;
-            margin-top: 20px;
+            transition: margin-left 0.3s;
+            min-height: 100vh;
+        }
+        
+        .sidebar.collapsed ~ .main-content {
+            margin-left: var(--sidebar-collapsed);
+        }
+        
+        /* Top Navbar */
+        .top-navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title h3 {
+            margin: 0;
+            color: #2b2d42;
+        }
+        
+        .page-title p {
+            margin: 5px 0 0 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: #2b2d42;
+            margin: 0;
+        }
+        
+        .user-role {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin: 0;
         }
         
         /* Cards */
@@ -68,7 +207,7 @@
             height: 60px;
             border-radius: 10px;
             display: flex;
-            align-items-center;
+            align-items: center;
             justify-content: center;
             font-size: 1.8rem;
             margin-bottom: 15px;
@@ -108,61 +247,130 @@
             margin-top: 40px;
             color: #6c757d;
         }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: var(--sidebar-collapsed);
+            }
+            
+            .sidebar:not(.collapsed) {
+                width: var(--sidebar-width);
+            }
+            
+            .main-content {
+                margin-left: var(--sidebar-collapsed);
+            }
+            
+            .sidebar:not(.collapsed) ~ .main-content {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .nav-text {
+                display: none;
+            }
+            
+            .sidebar:not(.collapsed) .nav-text {
+                display: inline;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-admin">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/admin/dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <a href="/admin/dashboard" class="sidebar-brand">
                 <i class="bi bi-speedometer2 logo-icon"></i>
-                <span>Admin POS</span>
+                <span class="nav-text">Admin POS</span>
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
             </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white @if(Request::is('admin/dashboard')) active @endif" 
-                           href="/admin/dashboard">
-                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @if(Request::is('admin/products*')) active @endif" 
-                           href="/admin/products">
-                            <i class="bi bi-box-seam me-1"></i>Produk
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white @if(Request::is('admin/reports*')) active @endif" 
-                           href="/admin/reports">
-                            <i class="bi bi-graph-up me-1"></i>Laporan
-                        </a>
-                    </li>
-                </ul>
-                
-                <div class="d-flex align-items-center">
-                    <span class="text-white me-3">
-                        <i class="bi bi-person-circle me-1"></i>Admin
-                    </span>
-                    <a href="/pos" class="btn btn-outline-light btn-sm me-2">
-                        <i class="bi bi-cash-register me-1"></i>Ke Kasir
+        </div>
+        
+        <!-- Sidebar Menu -->
+        <div class="sidebar-menu">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::is('admin/dashboard')) active @endif" 
+                       href="/admin/dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="nav-text">Dashboard</span>
                     </a>
-                   <!-- Di dalam navbar admin -->
-<a href="/logout" class="btn btn-outline-danger btn-sm">
-    <i class="bi bi-box-arrow-right me-1"></i>Logout
-</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::is('admin/products*')) active @endif" 
+                       href="/admin/products">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="nav-text">Produk</span>
+                    </a>
+                </li>
+                
+                <!-- MENU TRANSAKSI BARU -->
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::is('admin/transactions*')) active @endif" 
+                       href="/admin/transactions">
+                        <i class="bi bi-receipt"></i>
+                        <span class="nav-text">Transaksi</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link @if(Request::is('admin/reports*')) active @endif" 
+                       href="/admin/reports">
+                        <i class="bi bi-graph-up"></i>
+                        <span class="nav-text">Laporan</span>
+                    </a>
+                </li>
+                
+                <!-- Divider -->
+                <li class="  btn-outline-light nav-item mt-4">
+                    <div class=" nav-link text-muted small">
+                        <span class=" nav-text">AKSI CEPAT</span>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="/pos">
+                        <i class="bi bi-cash-register"></i>
+                        <span class="nav-text">Ke Kasir</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="nav-text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="page-title">
+                <h3>@yield('title', 'Dashboard Admin')</h3>
+                <p>@yield('subtitle', 'Ringkasan statistik dan aktivitas sistem')</p>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-info">
+                    <p class="user-name">Administrator</p>
+                    <p class="user-role">Super Admin</p>
+                </div>
+                <div class="user-avatar">
+                    <i class="bi bi-person-circle" style="font-size: 2rem; color: #4361ee;"></i>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container-fluid main-content">
+        
+        <!-- Page Content -->
         @yield('content')
         
         <!-- Footer -->
@@ -189,6 +397,25 @@
     
     <!-- Custom Scripts -->
     <script>
+        // Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mainContent = document.getElementById('mainContent');
+        
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            
+            // Update icon
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('bi-list');
+                icon.classList.add('bi-arrow-right');
+            } else {
+                icon.classList.remove('bi-arrow-right');
+                icon.classList.add('bi-list');
+            }
+        });
+        
         // Update last update time
         function updateLastUpdateTime() {
             const now = new Date();
@@ -202,6 +429,38 @@
         
         // Update every minute
         setInterval(updateLastUpdateTime, 60000);
+        
+        // Auto collapse sidebar on mobile
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('collapsed');
+                sidebarToggle.querySelector('i').classList.remove('bi-list');
+                sidebarToggle.querySelector('i').classList.add('bi-arrow-right');
+            } else {
+                sidebar.classList.remove('collapsed');
+                sidebarToggle.querySelector('i').classList.remove('bi-arrow-right');
+                sidebarToggle.querySelector('i').classList.add('bi-list');
+            }
+        }
+        
+        // Initial check
+        handleResize();
+        
+        // Listen for resize
+        window.addEventListener('resize', handleResize);
+        
+        // Set active menu based on current URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
     
     @yield('scripts')

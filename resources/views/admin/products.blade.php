@@ -18,8 +18,8 @@
                 <h5 class="mb-0">
                     <i class="bi bi-box-seam me-2"></i>Daftar Produk
                 </h5>
-                <button type="button" class="btn btn-admin" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                    <i class="bi bi-plus-circle me-1"></i>Tambah Produk
+                <button type="button" class="btn btn-outline-light btn-admin" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class=" bi bi-plus-circle me-1"></i>Tambah Produk
                 </button>
             </div>
             <div class="card-body">

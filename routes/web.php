@@ -83,3 +83,6 @@ Route::prefix('admin')->group(function () {
         return view('admin.reports');
     });
 });
+Route::get('/admin/transactions', function () {
+    return view('admin.transactions');  // Pastikan file ada di resources/views/admin/transactions.blade.php
+});
