@@ -77,109 +77,34 @@
                     </div>
                 </div>
 
-                <!-- Ringkasan Hari ini Section - Versi Diperbaiki -->
-                <div class="card summary-card mb-4">
-                    <div class="card-header bg-gradient-dark text-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0">
-                                    <i class="bi bi-file-earmark-text me-2"></i>Ringkasan Hari Ini
-                                </h5>
-                                <small class="text-light opacity-75">Laporan transaksi harian sistem POS</small>
-                            </div>
-                            <div class="summary-stats">
-                                <span class="badge bg-light text-dark me-2">
-                                    <i class="bi bi-clock-history me-1"></i>Terakhir update: 14:53
-                                </span>
-                                <span class="badge bg-success">
-                                    <i class="bi bi-check-circle me-1"></i>Aktif
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Aksi Laporan Section -->
+                <div class="card mb-4 border-0 shadow-sm">
                     <div class="card-body">
+                        <h5 class="mb-4">
+                            <i class="bi bi-gear me-2"></i>Aksi Laporan
+                        </h5>
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="summary-content">
-                                    <h6 class="text-muted mb-3">Statistik Hari Ini:</h6>
-                                    <div class="row">
-                                        <div class="col-6 col-md-3 mb-3">
-                                            <div class="stat-item">
-                                                <div class="stat-label">Total Transaksi</div>
-                                                <div class="stat-value">5</div>
-                                                <div class="stat-trend text-success">
-                                                    <i class="bi bi-arrow-up-right"></i> Stabil
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-md-3 mb-3">
-                                            <div class="stat-item">
-                                                <div class="stat-label">Total Pendapatan</div>
-                                                <div class="stat-value">Rp 560K</div>
-                                                <div class="stat-trend text-primary">
-                                                    <i class="bi bi-graph-up"></i> +12%
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-md-3 mb-3">
-                                            <div class="stat-item">
-                                                <div class="stat-label">Produk Terjual</div>
-                                                <div class="stat-value">50</div>
-                                                <div class="stat-trend text-warning">
-                                                    <i class="bi bi-basket"></i> 10/item
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-md-3 mb-3">
-                                            <div class="stat-item">
-                                                <div class="stat-label">Rata-rata</div>
-                                                <div class="stat-value">Rp 112K</div>
-                                                <div class="stat-trend text-info">
-                                                    <i class="bi bi-calculator"></i> Per transaksi
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-4">
-                                        <h6 class="text-muted mb-2">Detail Waktu Operasional:</h6>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="time-info">
-                                                    <i class="bi bi-clock text-primary me-2"></i>
-                                                    <span class="me-3">Transaksi Pertama: <strong>10:53</strong></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="time-info">
-                                                    <i class="bi bi-clock-history text-success me-2"></i>
-                                                    <span>Transaksi Terakhir: <strong>14:53</strong></span>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100 border">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-eye text-primary" style="font-size: 2.5rem; margin-bottom: 15px;"></i>
+                                        <h5 class="mb-2">Cek Laporan</h5>
+                                        <p class="text-muted small mb-3">Lihat detail transaksi hari ini</p>
+                                        <button class="btn btn-primary btn-lg w-100" id="viewReportBtn">
+                                            <i class="bi bi-eye me-2"></i>Cek Laporan
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="action-panel">
-                                    <h6 class="text-muted mb-3">Aksi Laporan:</h6>
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-success btn-lg mb-2" id="printTodayBtn">
-                                            <i class="bi bi-printer me-2"></i>Cetak Laporan
-                                        </button>
-                                        <button class="btn btn-primary btn-lg mb-2" id="exportTodayBtn">
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100 border">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-download text-success" style="font-size: 2.5rem; margin-bottom: 15px;"></i>
+                                        <h5 class="mb-2">Export Data</h5>
+                                        <p class="text-muted small mb-3">Export data transaksi ke CSV/Excel</p>
+                                        <button class="btn btn-success btn-lg w-100" id="exportDataBtn">
                                             <i class="bi bi-download me-2"></i>Export Data
                                         </button>
-                                        <button class="btn btn-outline-dark btn-lg" id="viewDetailsBtn">
-                                            <i class="bi bi-eye me-2"></i>Detail Lengkap
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="mt-4 pt-3 border-top">
-                                        <small class="text-muted">
-                                            <i class="bi bi-info-circle me-1"></i>
-                                            Laporan ini mencakup semua transaksi dari shift Pagi (08-16)
-                                        </small>
                                     </div>
                                 </div>
                             </div>
@@ -393,70 +318,15 @@
         color: #7b1fa2;
     }
     
-    /* Styling untuk Ringkasan Hari Ini yang diperbaiki */
-    .summary-card {
-        border: none;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
-        overflow: hidden;
+    /* Aksi Laporan Card Styling */
+    .card.border {
+        border-color: #dee2e6 !important;
+        transition: transform 0.2s, box-shadow 0.2s;
     }
     
-    .bg-gradient-dark {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    }
-    
-    .summary-stats {
-        display: flex;
-        align-items: center;
-    }
-    
-    .stat-item {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-        transition: transform 0.2s;
-        height: 100%;
-    }
-    
-    .stat-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stat-label {
-        font-size: 0.85rem;
-        color: #6c757d;
-        margin-bottom: 5px;
-        font-weight: 500;
-    }
-    
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 5px;
-    }
-    
-    .stat-trend {
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-    
-    .time-info {
-        background: #f8f9fa;
-        padding: 10px 15px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
-    
-    .action-panel {
-        background: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        height: 100%;
+    .card.border:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
     
     /* Button styling */
@@ -470,23 +340,6 @@
     .card-header.bg-light {
         background-color: #f8f9fa !important;
         border-bottom: 1px solid #dee2e6;
-    }
-    
-    /* Status indicator */
-    .status-indicator {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 5px;
-    }
-    
-    .status-completed {
-        background-color: #28a745;
-    }
-    
-    .status-pending {
-        background-color: #ffc107;
     }
 </style>
 @endsection
@@ -585,7 +438,7 @@
     }
     
     // Export today's transactions
-    document.getElementById('exportTodayBtn').addEventListener('click', function() {
+    document.getElementById('exportDataBtn').addEventListener('click', function() {
         const btn = this;
         const originalText = btn.innerHTML;
         
@@ -624,17 +477,54 @@
         }, 1000);
     });
     
-    // Print today's summary
-    document.getElementById('printTodayBtn').addEventListener('click', function() {
-        // Open print dialog
-        window.print();
-    });
-    
-    // View details button
-    document.getElementById('viewDetailsBtn')?.addEventListener('click', function() {
-        alert('Menampilkan detail lengkap laporan...');
-        // Redirect to detailed report page
-        // window.location.href = '/reports/detail';
+    // Cek Laporan button
+    document.getElementById('viewReportBtn').addEventListener('click', function() {
+        const btn = this;
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            
+            // Redirect to detailed report page
+            alert('Membuka halaman laporan detail...');
+            // window.location.href = '/reports/detail';
+            
+            // Show summary in modal
+            const summaryHtml = `
+                <div class="text-center p-4">
+                    <i class="bi bi-file-earmark-text text-primary" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                    <h4 class="mb-3">Ringkasan Laporan Hari Ini</h4>
+                    <div class="row text-start">
+                        <div class="col-6">
+                            <small class="text-muted">Total Transaksi</small>
+                            <h5 class="fw-bold">5 transaksi</h5>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Total Pendapatan</small>
+                            <h5 class="fw-bold">Rp 560.174</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Laporan ini mencakup semua transaksi dari shift Pagi (08-16)
+                    </small>
+                </div>
+            `;
+            
+            const modalContent = document.getElementById('transactionDetailContent');
+            modalContent.innerHTML = summaryHtml;
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('transactionDetailModal'));
+            const modalTitle = document.querySelector('#transactionDetailModal .modal-title');
+            modalTitle.innerHTML = '<i class="bi bi-file-earmark-text me-2"></i>Laporan Hari Ini';
+            modal.show();
+        }, 1000);
     });
     
     // Add click event to all eye buttons

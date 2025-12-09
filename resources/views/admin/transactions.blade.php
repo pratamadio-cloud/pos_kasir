@@ -75,25 +75,17 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th width="50">
-                                    <input type="checkbox" class="form-check-input" id="selectAll">
-                                </th>
                                 <th>Invoice</th>
                                 <th>Tanggal</th>
                                 <th>Kasir</th>
                                 <th>Items</th>
                                 <th>Total</th>
                                 <th>Metode</th>
-                                <th>Status</th>
-                                <th width="150">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @for($i = 1; $i <= 10; $i++)
                             <tr>
-                                <td>
-                                    <input type="checkbox" class="form-check-input select-item">
-                                </td>
                                 <td>
                                     <strong>INV-2024-00{{ 130 - $i }}</strong>
                                     <br><small class="text-muted">#T{{ 130 - $i }}</small>
@@ -121,37 +113,13 @@
                                 <td>
                                     @php
                                         $methods = [
-                                            ['bg-success', 'Tunai'],
-                                            ['bg-primary', 'QRIS'],
-                                            ['bg-purple', 'Transfer']
+                                            ['bg-success text-white', 'Tunai'],
+                                            ['bg-primary text-white', 'QRIS'],
+                                            ['bg-info text-dark', 'Transfer']  // Changed from bg-purple to bg-info with dark text
                                         ];
                                         $method = $methods[array_rand($methods)];
                                     @endphp
                                     <span class="badge {{ $method[0] }}">{{ $method[1] }}</span>
-                                </td>
-                                <td>
-                                    @php
-                                        $statuses = [
-                                            ['bg-success', 'Selesai'],
-                                            ['bg-warning', 'Pending'],
-                                            ['bg-danger', 'Dibatalkan']
-                                        ];
-                                        $status = $statuses[array_rand($statuses)];
-                                    @endphp
-                                    <span class="badge {{ $status[0] }}">{{ $status[1] }}</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" title="Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-secondary" title="Cetak Ulang">
-                                            <i class="bi bi-printer"></i>
-                                        </button>
-                                        <button class="btn btn-outline-info" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                    </div>
                                 </td>
                             </tr>
                             @endfor
@@ -304,21 +272,10 @@
 
 @section('scripts')
 <script>
-    // Select all checkboxes
-    document.getElementById('selectAll').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('.select-item');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-    });
-
-    // Row selection
+    // Row selection - simplified without checkbox logic
     document.querySelectorAll('tbody tr').forEach(row => {
         row.addEventListener('click', function(e) {
-            if (!e.target.classList.contains('btn') && 
-                !e.target.classList.contains('form-check-input')) {
-                this.classList.toggle('table-active');
-            }
+            this.classList.toggle('table-active');
         });
     });
 </script>
