@@ -10,29 +10,48 @@
                 <h5 class="mb-0">
                     <i class="bi bi-box-seam me-2"></i>Daftar Produk
                 </h5>
-                <a href="#" class="btn btn-light btn-sm">
+                <!-- GANTI LINK DENGAN BUTTON UNTUK MEMBUKA MODAL -->
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
                     <i class="bi bi-plus-circle me-1"></i>Tambah Produk
-                </a>
+                </button>
             </div>
             <div class="card-body">
-                <!-- Filter dan Pencarian -->
+                <!-- Filter dan Pencarian - DIPERBAIKI -->
                 <div class="row mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Cari produk...">
-                            <button class="btn btn-outline-primary" type="button">
+                            <span class="input-group-text">
                                 <i class="bi bi-search"></i>
-                            </button>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Cari produk..." id="searchInput">
                         </div>
                     </div>
-                    <div class="col-md-6 text-end">
-                        <button class="btn btn-outline-secondary">
-                            <i class="bi bi-filter me-1"></i>Filter
+                    <div class="col-md-3">
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">Semua Kategori</option>
+                            <option value="minuman">Minuman</option>
+                            <option value="makanan">Makanan</option>
+                            <option value="snack">Snack</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="statusFilter">
+                            <option value="">Semua Status</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Nonaktif</option>
+                            <option value="stok_sedikit">Stok Sedikit</option>
+                            <option value="stok_habis">Stok Habis</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Reset
                         </button>
                     </div>
                 </div>
 
-                <!-- Tabel Produk -->
+                <!-- Tabel Produk - BIARKAN ADA SEBAGAI CONTOH -->
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead class="table-light">
@@ -194,4 +213,89 @@
         </div>
     </div>
 </div>
+
+<!-- INCLUDE MODAL TAMBAH PRODUK DARI FILE TERPISAH -->
+@include('partials.add-product-modal')
+
+<script>
+    // Fungsi untuk reset filter
+    function resetFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('categoryFilter').value = '';
+        document.getElementById('statusFilter').value = '';
+        
+        // Tampilkan alert sukses
+        showAlert('Filter berhasil direset!', 'success');
+    }
+    
+    // Fungsi untuk menampilkan alert
+    function showAlert(message, type) {
+        // Remove existing alerts
+        const existingAlert = document.querySelector('.alert');
+        if (existingAlert) existingAlert.remove();
+        
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+        alertDiv.innerHTML = `
+            <i class="bi ${type === 'danger' ? 'bi-exclamation-triangle' : 'bi-check-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Insert after filter section
+        const filterSection = document.querySelector('.row.mb-4');
+        filterSection.parentNode.insertBefore(alertDiv, filterSection.nextSibling);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    // Event listener untuk filter
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter saat input berubah
+        document.getElementById('searchInput').addEventListener('input', function() {
+            applyFilters();
+        });
+        
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    
+    // Fungsi untuk menerapkan filter
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const category = document.getElementById('categoryFilter').value;
+        const status = document.getElementById('statusFilter').value;
+        
+        // Implementasi filter di sini (contoh sederhana)
+        console.log('Filter diterapkan:', { searchTerm, category, status });
+        
+        // Untuk implementasi lengkap, bisa ditambahkan logika filtering tabel
+        // showAlert('Filter diterapkan!', 'info');
+    }
+</script>
+
+<style>
+    /* Styling tambahan untuk filter */
+    .form-select:focus, .form-control:focus {
+        border-color: #4361ee;
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+</style>
 @endsection
