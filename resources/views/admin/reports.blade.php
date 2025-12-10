@@ -10,6 +10,100 @@
     </div>
 </div>
 
+
+<!-- Compact Summary Cards -->
+<div class="row mb-3 g-2">
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-cart-check text-primary" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Total Transaksi</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">1,248</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 8.3%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-success bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-currency-dollar text-success" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Total Pendapatan</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">42.5 Jt</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 12.5%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-warning bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-box-seam text-warning" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Produk Terjual</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">5,420</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 15.2%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card dashboard-card h-100">
+            <div class="card-body p-2">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <div class="bg-info bg-opacity-10 p-1 rounded">
+                            <i class="bi bi-graph-up-arrow text-info" style="font-size: 0.9rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <small class="text-muted">Rata-rata/Transaksi</small>
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">34,118</h6>
+                            <small class="text-success ms-1">
+                                <i class="bi bi-arrow-up-right"></i> 3.8%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Report Type Buttons -->
 <div class="row mb-3">
     <div class="col-md-12">
@@ -185,97 +279,7 @@
     </div>
 </div>
 
-<!-- Compact Summary Cards -->
-<div class="row mb-3 g-2">
-    <div class="col-md-3 col-6">
-        <div class="card dashboard-card h-100">
-            <div class="card-body p-2">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-primary bg-opacity-10 p-1 rounded">
-                            <i class="bi bi-cart-check text-primary" style="font-size: 0.9rem;"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <small class="text-muted">Total Transaksi</small>
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-0">1,248</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 8.3%
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-6">
-        <div class="card dashboard-card h-100">
-            <div class="card-body p-2">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-success bg-opacity-10 p-1 rounded">
-                            <i class="bi bi-currency-dollar text-success" style="font-size: 0.9rem;"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <small class="text-muted">Total Pendapatan</small>
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-0">42.5 Jt</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 12.5%
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-6">
-        <div class="card dashboard-card h-100">
-            <div class="card-body p-2">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-warning bg-opacity-10 p-1 rounded">
-                            <i class="bi bi-box-seam text-warning" style="font-size: 0.9rem;"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <small class="text-muted">Produk Terjual</small>
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-0">5,420</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 15.2%
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-6">
-        <div class="card dashboard-card h-100">
-            <div class="card-body p-2">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <div class="bg-info bg-opacity-10 p-1 rounded">
-                            <i class="bi bi-graph-up-arrow text-info" style="font-size: 0.9rem;"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <small class="text-muted">Rata-rata/Transaksi</small>
-                        <div class="d-flex align-items-center">
-                            <h6 class="mb-0">34,118</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 3.8%
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <!-- Charts - SAME HEIGHT -->
 <div class="row g-2">

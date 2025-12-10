@@ -328,7 +328,7 @@
                 
                 <!-- Divider -->
                 <li class="  btn-outline-light nav-item mt-4">
-                    <div class=" nav-link text-muted small">
+                    <div class=" nav-link text small">
                         <span class=" nav-text">AKSI CEPAT</span>
                     </div>
                 </li>
