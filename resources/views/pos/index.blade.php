@@ -64,7 +64,7 @@
                             <div class="card product-card" style="cursor: pointer;">
                                 <div class="card-body text-center">
                                     <div class="mb-2">
-                                        <i class="bi bi-cake2" style="font-size: 2rem; color: #4361ee;"></i>
+                                        <i class="bi bi-cup" style="font-size: 2rem; color: #4361ee;"></i>
                                     </div>
                                     <h6 class="card-title mb-1">Roti Bakar</h6>
                                     <p class="text-muted mb-1">RP 20,000</p>
