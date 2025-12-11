@@ -61,13 +61,12 @@
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
-                                <th>Status</th>
                                 <th width="150">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             <!-- Produk 1 -->
-                            @foreach ($data as $item)
+                            @foreach ($products as $item)
                                 
                             
                             <tr>
@@ -82,7 +81,7 @@
                                         </div>
                                         <div>
                                             <strong>{{ $item->name }}</strong><br>
-                                            <small class="text-muted">Minuman</small>
+                                            <small class="text-muted">{{ $item->category ? $item->category->category_name : '-' }}</small>
                                         </div>
                                     </div>
                                 </td>
@@ -91,9 +90,6 @@
                                 </td>
                                 <td>
                                     <span class="badge bg-success">{{ $item->stock }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Aktif</span>
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
@@ -114,87 +110,6 @@
                             </tr>
                             @endforeach
                             
-                            <!-- Produk 2 -->
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <span class="badge bg-light text-dark">8997009510024</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded p-2 me-3">
-                                            <i class="bi bi-cup" style="font-size: 1.5rem; color: #4361ee;"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Teh Manis</strong><br>
-                                            <small class="text-muted">Minuman</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <strong>RP 10,000</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">42</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-outline-primary">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-outline-info">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <!-- Produk 3 -->
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <span class="badge bg-light text-dark">8997009510025</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded p-2 me-3">
-                                            <i class="bi bi-cake2" style="font-size: 1.5rem; color: #4361ee;"></i>
-                                        </div>
-                                        <div>
-                                            <strong>Roti Bakar</strong><br>
-                                            <small class="text-muted">Makanan</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <strong>RP 20,000</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-warning">5</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Aktif</span>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="#" class="btn btn-outline-primary">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-outline-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-outline-info">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

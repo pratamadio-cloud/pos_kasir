@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,14 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $data = Products::all();
+        $products = Products::all();
+        $category = Category::all();
 
-        return view('products.product', compact('data'));
+        // eager load relasi 'category' supaya tidak terjadi query berulang (N+1)
+        $products = Products::with('category')->get();
+
+        // jika view form create ada di halaman ini (modal), kirim juga kategori
+        return view('products.product', compact('products', 'category'));
     }
 
     /**
@@ -37,6 +43,7 @@ class ProductsController extends Controller
             'name' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
+            'category_id' => 'required|exists:category,id',
         ]);
 
         // Simpan ke database

@@ -20,16 +20,15 @@
                             <label class="form-label">Nama Produk *</label>
                             <input type="text" class="form-control" id="productName" name="name" required>
                         </div>
-                        {{-- <div class="col-md-6">
+                        <div class="col-12">
                             <label class="form-label">Kategori *</label>
-                            <select class="form-select" id="productCategory" required>
+                            <select class="form-select" id="productCategory" name="category_id" required>
                                 <option value="">Pilih Kategori</option>
-                                <option value="minuman">Minuman</option>
-                                <option value="makanan">Makanan</option>
-                                <option value="snack">Snack</option>
-                                <option value="lainnya">Lainnya</option>
+                                @foreach ($category as $c)
+                                    <option value="{{ $c->id }}">{{ $c->category_name }}</option>
+                                @endforeach
                             </select>
-                        </div> --}}
+                        </div>
                         <div class="col-12">
                             <label class="form-label">Harga (Rp) *</label>
                             <input type="number" class="form-control" id="productPrice" name="price" required min="0">

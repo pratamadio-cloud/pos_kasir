@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 // Login Route
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PosController;
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
@@ -49,9 +50,12 @@ Route::get('/logout-action', function () {
 // ========== APPLICATION ROUTES ==========
 
 // POS Routes
-Route::get('/pos', function () {
-    return view('pos.index');
-});
+// Route::get('/pos', function () {
+//     return view('pos.index');
+// });
+
+Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+Route::resource('pos', PosController::class);
 
 Route::get('/pos/payment', function () {
     return view('pos.payment');
@@ -61,13 +65,13 @@ Route::get('/pos/print', function () {
     return view('pos.print');
 });
 
-// Products Routes
+// Products Routes$ }}</sm
 
 // Route::get('/products', function () {
 //     return view('products.product');
 // });
 
-Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+// Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
 Route::resource('products', ProductsController::class);
 
 Route::get('/products/edit', function () {
