@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\TransactionsController;
 use Illuminate\Support\Facades\Route;
 
 // ========== PUBLIC ROUTES ==========
@@ -60,9 +62,13 @@ Route::get('/pos/print', function () {
 });
 
 // Products Routes
-Route::get('/products', function () {
-    return view('products.product');
-});
+
+// Route::get('/products', function () {
+//     return view('products.product');
+// });
+
+Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+Route::resource('products', ProductsController::class);
 
 Route::get('/products/edit', function () {
     return view('products.edit');
@@ -73,9 +79,11 @@ Route::get('/products/hapus', function () {
 });
 
 // Transactions Routes
-Route::get('/transactions', function () {
-    return view('transactions.transaksi');
-});
+// Route::get('/transactions', function () {
+//     return view('transactions.transaksi');
+// });
+
+Route::get('/transactions', [TransactionsController::class, 'index']);
 
 // ========== ADMIN ROUTES ==========
 Route::prefix('admin')->group(function () {

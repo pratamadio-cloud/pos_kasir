@@ -11,7 +11,7 @@
                     <i class="bi bi-box-seam me-2"></i>Daftar Produk
                 </h5>
                 <!-- GANTI LINK DENGAN BUTTON UNTUK MEMBUKA MODAL -->
-                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#create">
                     <i class="bi bi-plus-circle me-1"></i>Tambah Produk
                 </button>
             </div>
@@ -67,10 +67,13 @@
                         </thead>
                         <tbody>
                             <!-- Produk 1 -->
+                            @foreach ($data as $item)
+                                
+                            
                             <tr>
-                                <td>1</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    <span class="badge bg-light text-dark">8997009510023</span>
+                                    <span class="badge bg-light text-dark">{{ $item->barcode }}</span>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -78,16 +81,16 @@
                                             <i class="bi bi-cup-straw" style="font-size: 1.5rem; color: #4361ee;"></i>
                                         </div>
                                         <div>
-                                            <strong>Kopi Hitam</strong><br>
+                                            <strong>{{ $item->name }}</strong><br>
                                             <small class="text-muted">Minuman</small>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <strong>RP 15,000</strong>
+                                    <strong>{{ $item->price }}</strong>
                                 </td>
                                 <td>
-                                    <span class="badge bg-success">25</span>
+                                    <span class="badge bg-success">{{ $item->stock }}</span>
                                 </td>
                                 <td>
                                     <span class="badge bg-success">Aktif</span>
@@ -109,6 +112,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            @endforeach
                             
                             <!-- Produk 2 -->
                             <tr>
@@ -215,7 +219,7 @@
 </div>
 
 <!-- INCLUDE MODAL TAMBAH PRODUK DARI FILE TERPISAH -->
-@include('partials.add-product-modal')
+@include('partials.create')
 
 <script>
     // Fungsi untuk reset filter

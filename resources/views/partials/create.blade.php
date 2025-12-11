@@ -1,4 +1,4 @@
-<div class="modal fade" id="addProductModal" tabindex="-1">
+<div class="modal fade" id="create" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,13 +8,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm">
+                <form id="addProductForm" action="{{ route('products.store') }}" method="POST">
+                    @csrf
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Nama Produk *</label>
-                            <input type="text" class="form-control" id="productName" required>
+                        <div class="col-12">
+                            <label class="form-label">Barcode (Opsional)</label>
+                            <input type="text" class="form-control" id="productBarcode" 
+                                   placeholder="Kode barcode produk" name="barcode">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12">
+                            <label class="form-label">Nama Produk *</label>
+                            <input type="text" class="form-control" id="productName" name="name" required>
+                        </div>
+                        {{-- <div class="col-md-6">
                             <label class="form-label">Kategori *</label>
                             <select class="form-select" id="productCategory" required>
                                 <option value="">Pilih Kategori</option>
@@ -23,33 +29,30 @@
                                 <option value="snack">Snack</option>
                                 <option value="lainnya">Lainnya</option>
                             </select>
-                        </div>
-                        <div class="col-md-6">
+                        </div> --}}
+                        <div class="col-12">
                             <label class="form-label">Harga (Rp) *</label>
-                            <input type="number" class="form-control" id="productPrice" required min="0">
+                            <input type="number" class="form-control" id="productPrice" name="price" required min="0">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label class="form-label">Stok Awal *</label>
-                            <input type="number" class="form-control" id="productStock" required min="0">
+                            <input type="number" class="form-control" id="productStock" name="stock" required min="0">
                         </div>
-                        <div class="col-12">
-                            <label class="form-label">Barcode (Opsional)</label>
-                            <input type="text" class="form-control" id="productBarcode" 
-                                   placeholder="Kode barcode produk">
-                        </div>
-                        <div class="col-12">
+                        
+                        {{-- <div class="col-12">
                             <label class="form-label">Deskripsi (Opsional)</label>
                             <textarea class="form-control" id="productDescription" rows="2"></textarea>
-                        </div>
+                        </div> --}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" onclick="saveNewProduct()">
+                            <i class="bi bi-save me-1"></i>Simpan Produk
+                        </button>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" onclick="saveNewProduct()">
-                    <i class="bi bi-save me-1"></i>Simpan Produk
-                </button>
-            </div>
+            
         </div>
     </div>
 </div>
