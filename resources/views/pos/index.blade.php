@@ -43,54 +43,9 @@
                                     <div class="mb-2">
                                         <i class="bi bi-cup-straw" style="font-size: 2rem; color: #4361ee;"></i>
                                     </div>
-<<<<<<< HEAD
-                                    <h6 class="card-title mb-1">Kopi Hitam</h6>
-                                    <p class="text-muted mb-1">RP 15,000</p>
-                                    <small class="text-success">Stok: 25</small>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Produk 2 -->
-                        <div class="col-md-3 mb-3">
-                            <div class="card product-card" style="cursor: pointer;">
-                                <div class="card-body text-center">
-                                    <div class="mb-2">
-                                        <i class="bi bi-cup" style="font-size: 2rem; color: #4361ee;"></i>
-                                    </div>
-                                    <h6 class="card-title mb-1">Teh Manis</h6>
-                                    <p class="text-muted mb-1">RP 10,000</p>
-                                    <small class="text-success">Stok: 42</small>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Produk 3 -->
-                        <div class="col-md-3 mb-3">
-                            <div class="card product-card" style="cursor: pointer;">
-                                <div class="card-body text-center">
-                                    <div class="mb-2">
-                                        <i class="bi bi-cup" style="font-size: 2rem; color: #4361ee;"></i>
-                                    </div>
-                                    <h6 class="card-title mb-1">Roti Bakar</h6>
-                                    <p class="text-muted mb-1">RP 20,000</p>
-                                    <small class="text-warning">Stok: 5</small>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Produk 4 -->
-                        <div class="col-md-3 mb-3">
-                            <div class="card product-card" style="cursor: pointer;">
-                                <div class="card-body text-center">
-                                    <div class="mb-2">
-                                        <i class="bi bi-droplet" style="font-size: 2rem; color: #4361ee;"></i>
-                                    </div>
-                                    <h6 class="card-title mb-1">Air Mineral</h6>
-                                    <p class="text-muted mb-1">RP 5,000</p>
-                                    <small class="text-success">Stok: 100</small>
-=======
                                     <h6 class="card-title mb-1">{{ $item->name }}</h6>
                                     <p class="text-muted mb-1">{{ $item->price }}</p>
                                     <small class="text-success">{{ $item->stock }}</small>
->>>>>>> f6153af
                                 </div>
                             </div>
                         </div>
