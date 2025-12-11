@@ -26,7 +26,7 @@ class User extends Authenticatable
 // 1. php artisan tinker
 
 // 2. \App\Models\User::create([
-//     'name' => 'Admin',
-//     'email' => 'admin@example.com',
-//     'password' => bcrypt('admin123'),
+//     'name' => 'kasir',
+//     'email' => 'kasir@example.com',
+//     'password' => bcrypt('kasir123'),
 // ]);
