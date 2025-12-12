@@ -17,39 +17,36 @@
             </div>
             <div class="card-body">
                 <!-- Filter dan Pencarian - DIPERBAIKI -->
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-search"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Cari produk..." id="searchInput">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" id="categoryFilter">
-                            <option value="">Semua Kategori</option>
-                            <option value="minuman">Minuman</option>
-                            <option value="makanan">Makanan</option>
-                            <option value="snack">Snack</option>
-                            <option value="lainnya">Lainnya</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" id="statusFilter">
-                            <option value="">Semua Status</option>
-                            <option value="aktif">Aktif</option>
-                            <option value="nonaktif">Nonaktif</option>
-                            <option value="stok_sedikit">Stok Sedikit</option>
-                            <option value="stok_habis">Stok Habis</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 text-end">
-                        <button class="btn btn-outline-secondary" onclick="resetFilters()">
-                            <i class="bi bi-arrow-clockwise me-1"></i>Reset
-                        </button>
-                    </div>
-                </div>
+                <form action="{{ route('products.index') }}" method="GET">
+    <div class="row mb-4">
+        
+        <!-- SEARCH -->
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="Cari produk..."
+                    name="search" value="{{ request('search') }}">
+            </div>
+        </div>
+
+        <!-- KATEGORI -->
+        <div class="col-md-3">
+            <select name="category_id" class="form-select" onchange="this.form.submit()">
+                <option value="">Semua Kategori</option>
+
+                @foreach ($category as $c)
+                    <option value="{{ $c->id }}"
+                        {{ request('category_id') == $c->id ? 'selected' : '' }}>
+                        {{ $c->category_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+</form>
+
 
                 <!-- Tabel Produk - BIARKAN ADA SEBAGAI CONTOH -->
                 <div class="table-responsive">
@@ -76,9 +73,9 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="bg-light rounded p-2 me-3">
+                                        {{-- <div class="bg-light rounded p-2 me-3">
                                             <i class="bi bi-cup-straw" style="font-size: 1.5rem; color: #4361ee;"></i>
-                                        </div>
+                                        </div> --}}
                                         <div>
                                             <strong>{{ $item->name }}</strong><br>
                                             <small class="text-muted">{{ $item->category ? $item->category->category_name : '-' }}</small>
@@ -93,18 +90,18 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/products/edit" class="btn btn-outline-primary" 
+                                        <a href="{{ route('products.edit', $item->id) }}" class="btn btn-outline-primary" 
                                            data-bs-toggle="tooltip" title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a href="/products/hapus" class="btn btn-outline-danger"
-                                           data-bs-toggle="tooltip" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-outline-info"
-                                           data-bs-toggle="tooltip" title="Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
+                                        <form action="{{ route('products.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-outline-danger"
+                                            data-bs-toggle="tooltip" title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

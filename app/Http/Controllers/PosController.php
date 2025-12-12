@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 
@@ -10,14 +11,26 @@ class PosController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Products::all();
-        $max_data = 8;
-        $data = Products::with('category')->paginate($max_data);  
+        $query = Products::with('category');
 
-        return view('pos.index', compact('data'));
+        if ($request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('barcode', 'like', '%' . $request->search . '%')
+                ->orWhereHas('category', function($q) use ($request) {
+                    $q->where('category_name', 'like', '%' . $request->search . '%');
+                });
+        }
+
+        $max_data = 8; // jumlah per halaman
+        $products = $query->paginate($max_data);
+
+        $category = Category::all(); // untuk dropdown
+
+        return view('pos.index', compact('products', 'category'));
     }
+
 
     /**
      * Show the form for creating a new resource.

@@ -15,18 +15,16 @@
             <div class="card-body">
                 <!-- Barcode Scanner -->
                 <div class="mb-4">
-                    <label for="barcode" class="form-label">Scan Barcode / Cari Produk</label>
+                    <label for="barcode" class="form-label">Cari Produk</label>
+                    <form action="{{ route('pos.index') }}" method="GET">
+                        @csrf
                     <div class="input-group">
-                        <input type="text" class="form-control form-control-lg" 
-                               id="barcode" placeholder="Scan barcode atau ketik kode/nama produk"
-                               autofocus>
-                        <button class="btn btn-primary" type="button">
-                            <i class="bi bi-upc-scan"></i> Scan
-                        </button>
-                        <button class="btn btn-secondary" type="button">
+                        <input type="text" class="form-control form-control-lg" id="barcode" placeholder="Scan barcode atau ketik kode/nama produk" name="search" value="{{ request('search') }}" autofocus>
+                        <button class="btn btn-secondary" type="submit">
                             <i class="bi bi-search"></i> Cari
                         </button>
                     </div>
+                    </form>
                 </div>
 
                 <!-- Daftar Produk -->
@@ -34,15 +32,15 @@
                     <h6 class="mb-3">Daftar Produk Cepat</h6>
                     <div class="row">
                         <!-- Produk 1 -->
-                        @foreach ($data as $item)
+                        @foreach ($products as $item)
                             
                         
                         <div class="col-md-3 mb-3">
                             <div class="card product-card" style="cursor: pointer;">
                                 <div class="card-body text-center">
-                                    <div class="mb-2">
+                                    {{-- <div class="mb-2">
                                         <i class="bi bi-cup-straw" style="font-size: 2rem; color: #4361ee;"></i>
-                                    </div>
+                                    </div> --}}
                                     <h6 class="card-title mb-1">{{ $item->name }}</h6>
                                     <p class="text-muted mb-1">{{ $item->price }}</p>
                                     <small class="text-success">{{ $item->stock }}</small>
@@ -52,7 +50,8 @@
                         @endforeach
                     </div>
 
-                    {{ $data->links() }}
+                    {{-- {{ $products->links() }} --}}
+                    {{ $products->appends(request()->query())->links() }}
                     
                 </div>
             </div>

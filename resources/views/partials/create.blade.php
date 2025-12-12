@@ -11,11 +11,11 @@
                 <form id="addProductForm" action="{{ route('products.store') }}" method="POST">
                     @csrf
                     <div class="row g-3">
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <label class="form-label">Barcode (Opsional)</label>
                             <input type="text" class="form-control" id="productBarcode" 
                                    placeholder="Kode barcode produk" name="barcode">
-                        </div>
+                        </div> --}}
                         <div class="col-12">
                             <label class="form-label">Nama Produk *</label>
                             <input type="text" class="form-control" id="productName" name="name" required>

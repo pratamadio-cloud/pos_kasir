@@ -12,20 +12,20 @@
                 </h5>
             </div>
             <div class="card-body">
-                <form>
+                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="row">
                         <!-- Barcode -->
                         <div class="col-md-6 mb-3">
                             <label for="barcode" class="form-label">Barcode</label>
-                            <input type="text" class="form-control" id="barcode" 
-                                   value="8997009510023" required>
+                            <input type="text" class="form-control" id="barcode" name="barcode" value="{{ old('barcode', $product->barcode) }}">
                         </div>
 
                         <!-- Nama Produk -->
                         <div class="col-md-6 mb-3">
                             <label for="productName" class="form-label">Nama Produk</label>
-                            <input type="text" class="form-control" id="productName" 
-                                   value="Kopi Hitam" required>
+                            <input type="text" class="form-control" id="productName" name="name" value="{{ old('name', $product->name) }}" required>
                         </div>
 
                         <!-- Harga -->
@@ -33,54 +33,37 @@
                             <label for="price" class="form-label">Harga</label>
                             <div class="input-group">
                                 <span class="input-group-text">RP</span>
-                                <input type="number" class="form-control" id="price" 
-                                       value="15000" required>
+                                <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $product->price) }}" required>
                             </div>
                         </div>
 
                         <!-- Stok -->
                         <div class="col-md-6 mb-3">
                             <label for="stock" class="form-label">Stok</label>
-                            <input type="number" class="form-control" id="stock" 
-                                   value="25" required>
+                            <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock', $product->stock) }}" required>
                         </div>
 
                         <!-- Kategori -->
                         <div class="col-md-6 mb-3">
                             <label for="category" class="form-label">Kategori</label>
-                            <select class="form-select" id="category">
-                                <option value="minuman" selected>Minuman</option>
-                                <option value="makanan">Makanan</option>
-                                <option value="snack">Snack</option>
-                                <option value="lainnya">Lainnya</option>
+                            <select name="category_id" class="form-select" id="category">
+                                @foreach ($category as $c)
+                                <option value="{{ $c->id }}"
+                                    {{ $product->category_id == $c->id ? 'selected' : '' }}>
+                                    {{ $c->category_name }}
+                                </option>
+                                @endforeach
                             </select>
-                        </div>
-
-                        <!-- Status -->
-                        <div class="col-md-6 mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-select" id="status">
-                                <option value="active" selected>Aktif</option>
-                                <option value="inactive">Non-Aktif</option>
-                            </select>
-                        </div>
-
-                        <!-- Deskripsi -->
-                        <div class="col-12 mb-4">
-                            <label for="description" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="description" rows="3">
-Kopi hitam dengan rasa pahit yang khas, cocok untuk penggemar kopi asli.
-                            </textarea>
                         </div>
                     </div>
 
                     <!-- Tombol Aksi -->
                     <div class="d-flex justify-content-between">
-                        <a href="/products" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left me-2"></i>Kembali
+                        <a href="{{ route('products.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Batal
                         </a>
                         <div>
-                            <button type="button" class="btn btn-danger me-2">
+                            <button type="reset" class="btn btn-danger me-2">
                                 <i class="bi bi-trash me-2"></i>Hapus
                             </button>
                             <button type="submit" class="btn btn-primary">

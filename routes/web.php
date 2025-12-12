@@ -74,9 +74,10 @@ Route::get('/pos/print', function () {
 // Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
 Route::resource('products', ProductsController::class);
 
-Route::get('/products/edit', function () {
-    return view('products.edit');
-});
+// Route::get('/products/edit', function () {
+//     return view('products.edit');
+// });
+// Route::get('product.edit')
 
 Route::get('/products/hapus', function () {
     return view('products.hapus');
