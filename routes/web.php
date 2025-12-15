@@ -54,8 +54,14 @@ Route::get('/logout-action', function () {
 //     return view('pos.index');
 // });
 
+
+
 Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
-Route::resource('pos', PosController::class);
+Route::post('/pos/add', [PosController::class, 'addToCart'])->name('pos.add');
+Route::post('/pos/update', [PosController::class, 'updateCart'])->name('pos.update');
+Route::post('/pos/remove', [PosController::class, 'removeFromCart'])->name('pos.remove');
+Route::post('/pos/clear', [PosController::class, 'clearCart'])->name('pos.clear');
+
 
 Route::get('/pos/payment', function () {
     return view('pos.payment');

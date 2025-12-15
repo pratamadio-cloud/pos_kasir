@@ -13,70 +13,102 @@ class PosController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Products::with('category');
+        $query = Products::query();
 
         if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%')
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('barcode', 'like', '%' . $request->search . '%')
-                ->orWhereHas('category', function($q) use ($request) {
-                    $q->where('category_name', 'like', '%' . $request->search . '%');
+                ->orWhereHas('category', function ($qc) use ($request) {
+                    $qc->where('category_name', 'like', '%' . $request->search . '%');
                 });
+            });
         }
 
-        $max_data = 8; // jumlah per halaman
-        $products = $query->paginate($max_data);
+        $cart = session()->get('cart', []);
+        $hasCart = count($cart) > 0;
 
-        $category = Category::all(); // untuk dropdown
+        // 🔥 JUMLAH ITEM DINAMIS
+        $perPage = $hasCart ? 8 : 8;
 
-        return view('pos.index', compact('products', 'category'));
+        $products = $query->paginate($perPage);
+
+        $total = 0;
+        $total_item = 0;
+
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['qty'];
+            $total_item += $item['qty'];
+        }
+
+        return view('pos.index', compact(
+            'products',
+            'cart',
+            'total',
+            'total_item',
+            'hasCart'
+        ));
     }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addToCart(Request $request)
     {
-        //
+        $product = Products::findOrFail($request->product_id);
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$product->id])) {
+            $cart[$product->id]['qty']++;
+        } else {
+            $cart[$product->id] = [
+                'name'  => $product->name,
+                'price' => $product->price,
+                'qty'   => 1,
+            ];
+        }
+
+        session()->put('cart', $cart);
+        return back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function updateCart(Request $request)
     {
-        //
+        $cart = session()->get('cart', []);
+        $productId = $request->product_id;
+
+        if (!isset($cart[$productId])) {
+            return back();
+        }
+
+        if ($request->action === 'plus') {
+            $cart[$productId]['qty']++;
+        }
+
+        if ($request->action === 'minus') {
+            if ($cart[$productId]['qty'] > 1) {
+                $cart[$productId]['qty']--;
+            }
+        }
+
+        session()->put('cart', $cart);
+        return back();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function removeFromCart(Request $request)
     {
-        //
+        $cart = session()->get('cart', []);
+        unset($cart[$request->product_id]);
+        session()->put('cart', $cart);
+
+        return back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function clearCart()
     {
-        //
+        session()->forget('cart');
+
+        return redirect()->route('pos.index')
+            ->with('success', 'Transaksi dibatalkan');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

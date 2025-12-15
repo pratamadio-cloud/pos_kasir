@@ -3,9 +3,9 @@
 @section('title', 'Kasir POS')
 
 @section('content')
-<div class="row">
+<div class="row pos-wrapper">
     <!-- Kolom Kiri: Input Produk -->
-    <div class="col-md-8">
+    <div class="{{ $hasCart ? 'col-md-8' : 'col-md-12' }}">
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">
@@ -13,7 +13,6 @@
                 </h5>
             </div>
             <div class="card-body">
-                <!-- Barcode Scanner -->
                 <div class="mb-4">
                     <label for="barcode" class="form-label">Cari Produk</label>
                     <form action="{{ route('pos.index') }}" method="GET">
@@ -37,20 +36,22 @@
                         
                         <div class="col-md-3 mb-3">
                             <div class="card product-card" style="cursor: pointer;">
-                                <div class="card-body text-center">
-                                    {{-- <div class="mb-2">
-                                        <i class="bi bi-cup-straw" style="font-size: 2rem; color: #4361ee;"></i>
-                                    </div> --}}
-                                    <h6 class="card-title mb-1">{{ $item->name }}</h6>
-                                    <p class="text-muted mb-1">{{ $item->price }}</p>
-                                    <small class="text-success">{{ $item->stock }}</small>
-                                </div>
+                                <div onclick="document.getElementById('add-{{ $item->id }}').submit()" style="cursor: pointer;">
+                                    <form id="add-{{ $item->id }}" action="{{ route('pos.add') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $item->id }}">
+                                    </form>
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title mb-1">{{ $item->name }}</h6>
+                                        <p class="text-muted mb-1">{{ $item->price }}</p>
+                                        <small class="text-success">{{ $item->stock }}</small>
+                                    </div>
+                                </div>    
                             </div>
                         </div>
                         @endforeach
                     </div>
 
-                    {{-- {{ $products->links() }} --}}
                     {{ $products->appends(request()->query())->links() }}
                     
                 </div>
@@ -58,102 +59,149 @@
         </div>
     </div>
 
-    <!-- Kolom Kanan: Keranjang Belanja -->
+    @if ($hasCart)
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">
-                    <i class="bi bi-cart3 me-2"></i>Keranjang Belanja
-                </h5>
+    <div class="card pos-cart">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="bi bi-cart3 me-2"></i>Keranjang Belanja
+            </h5>
+        </div>
+
+        {{-- BODY FLEX --}}
+        <div class="card-body cart-body">
+
+            {{-- CART ITEMS (SCROLL) --}}
+            <div class="cart-items p-3" id="cartItems">
+                @forelse ($cart as $productId => $item)
+                    @php $subtotal = $item['qty'] * $item['price']; @endphp
+
+                    <div class="pos-item mb-3 pb-2 border-bottom">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>{{ $item['name'] }}</strong><br>
+                                <small class="text-muted">
+                                    Rp {{ number_format($item['price']) }}
+                                </small>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-1">
+                                <form action="{{ route('pos.update') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $productId }}">
+                                    <input type="hidden" name="action" value="minus">
+                                    <button class="btn btn-sm btn-outline-secondary">−</button>
+                                </form>
+
+                                <span>{{ $item['qty'] }}</span>
+
+                                <form action="{{ route('pos.update') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $productId }}">
+                                    <input type="hidden" name="action" value="plus">
+                                    <button class="btn btn-sm btn-outline-secondary">+</button>
+                                </form>
+
+                                <form action="{{ route('pos.remove') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="product_id" value="{{ $productId }}">
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="text-end fw-bold">
+                            Rp {{ number_format($subtotal) }}
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-muted text-center">Keranjang kosong</p>
+                @endforelse
             </div>
-            <div class="card-body">
-                <!-- Daftar Item di Cart -->
-                <div class="cart-items mb-3">
-                    <!-- Item 1 -->
-                    <div class="pos-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Kopi Hitam</h6>
-                                <small class="text-muted">RP 15,000</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-secondary" type="button">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <span class="mx-2">2</span>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger ms-3" type="button">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="text-end mt-1">
-                            <span class="fw-bold subtotal">RP 30,000</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Item 2 -->
-                    <div class="pos-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Teh Manis</h6>
-                                <small class="text-muted">RP 10,000</small>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-secondary" type="button">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <span class="mx-2">1</span>
-                                <button class="btn btn-sm btn-outline-secondary" type="button">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger ms-3" type="button">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="text-end mt-1">
-                            <span class="fw-bold subtotal">RP 10,000</span>
-                        </div>
-                    </div>
+
+            {{-- TOTAL (STICKY BOTTOM) --}}
+            <div class="cart-total ">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Total Item</span>
+                    <strong>{{ $total_item }}</strong>
                 </div>
 
-                <!-- Total Pembayaran -->
-                <div class="cart-total">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Total Item:</span>
-                        <span class="fw-bold">3</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Total Belanja:</span>
-                        <span class="fw-bold fs-5 text-primary" id="total-amount">RP 40,000</span>
-                    </div>
-                    
-                    <div class="d-grid gap-2">
-                        <a href="/pos/payment" class="btn btn-primary btn-lg">
-                            <i class="bi bi-credit-card me-2"></i>Proses Pembayaran
-                        </a>
-                        <button class="btn btn-outline-secondary">
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Total Belanja</span>
+                    <strong class="text-primary fs-5">
+                        Rp {{ number_format($total) }}
+                    </strong>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a href="/pos/payment" class="btn btn-primary btn-lg">
+                        <i class="bi bi-credit-card me-2"></i>Proses Pembayaran
+                    </a>
+                    <form action="{{ route('pos.clear') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-outline-danger w-100">
                             <i class="bi bi-x-circle me-2"></i>Batalkan Transaksi
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+@endif
+
+</div>
 @endsection
 
-@section('scripts')
+@push('styles')
+<style>
+/* CARD KERANJANG */
+.pos-cart {
+    height: calc(100vh - 110px); /* header + navbar */
+    display: flex;
+    flex-direction: column;
+}
+
+/* BODY KERANJANG */
+.cart-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* LIST ITEM → SCROLL */
+.cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+/* TOTAL → FIX BAWAH */
+.cart-total {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem;
+    background: #fff;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 768px) {
+    .pos-cart {
+        height: calc(100vh - 90px);
+    }
+}
+
+</style>
+@endpush
+
 <script>
-    // Menambahkan produk ke cart
-    document.querySelectorAll('.product-card').forEach(card => {
-        card.addEventListener('click', function() {
-            // Simulasi penambahan produk
-            alert('Produk ditambahkan ke keranjang!');
-        });
-    });
+    const cart = document.getElementById('cartItems');
+    if (cart) {
+        cart.scrollBottom = cart.scrollHeight;
+    }
 </script>
-@endsection
+

@@ -90,10 +90,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('products.edit', $item->id) }}" class="btn btn-outline-primary" 
+                                        <button onclick="window.location.href='{{ route('products.edit', $item->id) }}'" class="btn btn-outline-primary" 
                                            data-bs-toggle="tooltip" title="Edit">
                                             <i class="bi bi-pencil"></i>
-                                        </a>
+                                        </button>
                                         <form action="{{ route('products.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
                                             @csrf
                                             @method('DELETE')
