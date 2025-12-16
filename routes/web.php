@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 // Login Route
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PosController;
 
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
@@ -63,9 +64,15 @@ Route::post('/pos/remove', [PosController::class, 'removeFromCart'])->name('pos.
 Route::post('/pos/clear', [PosController::class, 'clearCart'])->name('pos.clear');
 
 
-Route::get('/pos/payment', function () {
-    return view('pos.payment');
-});
+// Route::get('/pos/payment', function () {
+//     return view('pos.payment');
+// });
+
+Route::get('/payment', [PaymentController::class, 'index'])
+        ->name('payment.index');
+
+Route::post('/transaction', [TransactionsController::class, 'store'])
+        ->name('transaction.store');
 
 Route::get('/pos/print', function () {
     return view('pos.print');

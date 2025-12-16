@@ -136,7 +136,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <a href="/pos/payment" class="btn btn-primary btn-lg">
+                    <a href="{{ route('payment.index') }}" class="btn btn-primary btn-lg">
                         <i class="bi bi-credit-card me-2"></i>Proses Pembayaran
                     </a>
                     <form action="{{ route('pos.clear') }}" method="POST">

@@ -36,9 +36,17 @@ class PosController extends Controller
         $total = 0;
         $total_item = 0;
 
+        // $total = collect($cart)->sum('subtotal');
+        // $total_item = collect($cart)->sum('qty');
+
+
         foreach ($cart as $item) {
-            $total += $item['price'] * $item['qty'];
-            $total_item += $item['qty'];
+            // $total += $item['price'] * $item['qty'];
+            // $total_item += $item['qty'];
+
+            $total = collect($cart)->sum('subtotal');
+            $total_item = collect($cart)->sum('qty');
+
         }
 
         return view('pos.index', compact(
@@ -58,11 +66,15 @@ class PosController extends Controller
 
         if (isset($cart[$product->id])) {
             $cart[$product->id]['qty']++;
+            $cart[$product->id]['subtotal'] =
+                $cart[$product->id]['qty'] * $cart[$product->id]['price'];
         } else {
             $cart[$product->id] = [
-                'name'  => $product->name,
-                'price' => $product->price,
-                'qty'   => 1,
+                'product_id' => $product->id,
+                'name'       => $product->name,
+                'price'      => $product->price,
+                'qty'        => 1,
+                'subtotal'   => $product->price,
             ];
         }
 
@@ -88,6 +100,10 @@ class PosController extends Controller
                 $cart[$productId]['qty']--;
             }
         }
+
+        // 🔥 update subtotal
+        $cart[$productId]['subtotal'] =
+            $cart[$productId]['qty'] * $cart[$productId]['price'];
 
         session()->put('cart', $cart);
         return back();
