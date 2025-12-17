@@ -29,7 +29,7 @@ class PosController extends Controller
         $hasCart = count($cart) > 0;
 
         // 🔥 JUMLAH ITEM DINAMIS
-        $perPage = $hasCart ? 8 : 8;
+        $perPage = $hasCart ? 4 : 8;
 
         $products = $query->paginate($perPage);
 

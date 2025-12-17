@@ -78,9 +78,9 @@
                     <div class="mb-3">
                         <label class="fw-bold">Metode Pembayaran</label>
                         <select name="payment_method" class="form-select" required>
-                            <option value="cash">Tunai</option>
-                            <option value="qris">QRIS</option>
-                            <option value="transfer">Transfer</option>
+                            <option value="cash">💵 Tunai</option>
+                            <option value="qris">📱 QRIS</option>
+                            <option value="transfer">🏦 Transfer Bank</option>
                         </select>
                     </div>
 

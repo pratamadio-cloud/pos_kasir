@@ -142,30 +142,26 @@
 
             <!-- User Dropdown -->
             <div class="dropdown">
-                <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" 
+                <button class="btn btn-outline-secondary btn-md dropdown-toggle" type="button" 
                         data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle me-1"></i>Kasir: Admin
+                    <i class="bi bi-person-circle me-1"></i>Kasir: {{ auth()->user()->roleLabel() }}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li class="dropdown-header">
-                        <small class="text-muted">Logged in as</small>
+                        <small class="text-muted">Masuk sebagai</small>
                         <div class="fw-bold">
                             {{ auth()->user()->roleLabel() }}
                         </div>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                        <a class="dropdown-item" href="/admin-login">
-                            <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
+                        <center>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-danger">Logout</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
                         </form>
-                    </li>
+                    </center>
+                    </li>                    
                 </ul>
             </div>
         </div>

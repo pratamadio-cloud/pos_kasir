@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addProductForm" action="{{ route('products.store') }}" method="POST">
+                <form id="addProductForm" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3">
                         {{-- <div class="col-12">
@@ -32,6 +32,17 @@
                         <div class="col-12">
                             <label class="form-label">Harga (Rp) *</label>
                             <input type="number" class="form-control" id="productPrice" name="price" required min="0">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Foto Produk</label>
+                            <input type="file" 
+                                name="photo" 
+                                class="form-control"
+                                accept="image/*">
+
+                            @error('photo')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                         <div class="col-12">
                             <label class="form-label">Stok Awal *</label>

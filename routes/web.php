@@ -14,9 +14,9 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // TEST AUTH
-Route::middleware(['auth', 'role:cashier'])->group(function () {
-    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
-});
+// Route::middleware(['auth', 'role:cashier'])->group(function () {
+//     Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+// });
 
 // TEST ROLE
 Route::middleware(['auth', 'role:admin'])->group(function () {

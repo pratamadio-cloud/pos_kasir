@@ -8,7 +8,7 @@ use App\Models\Category;
 class Products extends Model
 {
     protected $table = 'products';
-    protected $fillable = ['barcode', 'name', 'price', 'stock', 'category_id'];
+    protected $fillable = ['barcode', 'name', 'price', 'stock', 'category_id', 'photo',];
 
     public function category()
     {

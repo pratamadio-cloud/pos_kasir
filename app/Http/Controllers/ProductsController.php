@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
@@ -52,35 +53,43 @@ class ProductsController extends Controller
      */
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'barcode' => 'nullable|digits:13|unique:products,barcode',
-        'name' => 'required',
-        'price' => 'required|numeric',
-        'stock' => 'required|integer',
-        'category_id' => 'required|exists:category,id',
-    ]);
+    {
+        $validated = $request->validate([
+            'barcode' => 'nullable|digits:13|unique:products,barcode',
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'category_id' => 'required|exists:category,id',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    // jika tidak ada barcode disubmit, generate otomatis
-    if (empty($validated['barcode'])) {
-        $validated['barcode'] = $this->generateEAN13();
-    }
-
-    try {
-        Products::create($validated);
-    } catch (\Illuminate\Database\QueryException $e) {
-
-        if (str_contains($e->getMessage(), 'UNIQUE')) {
-            // jika barcode bentrok, generate ulang
+        // barcode otomatis
+        if (empty($validated['barcode'])) {
             $validated['barcode'] = $this->generateEAN13();
-            Products::create($validated);
-        } else {
-            throw $e;
         }
+
+        // 🔽 upload foto
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')
+                                        ->store('products', 'public');
+        }
+
+        try {
+            Products::create($validated);
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            if (str_contains($e->getMessage(), 'UNIQUE')) {
+                $validated['barcode'] = $this->generateEAN13();
+                Products::create($validated);
+            } else {
+                throw $e;
+            }
+        }
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product berhasil ditambahkan');
     }
 
-    return redirect()->route('products.index')->with('success', 'Product berhasil ditambahkan');
-}
 
 
     private function generateEAN13()
@@ -124,8 +133,8 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        $product = Products::findOrFail($id);
+{
+    $product = Products::findOrFail($id);
 
     $validated = $request->validate([
         'barcode' => 'nullable|digits:13|unique:products,barcode,' . $product->id,
@@ -133,25 +142,49 @@ class ProductsController extends Controller
         'price' => 'required|numeric',
         'stock' => 'required|integer',
         'category_id' => 'required|exists:category,id',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // Jika barcode tidak diisi, generate otomatis
+    // barcode otomatis
     if (empty($validated['barcode'])) {
         $validated['barcode'] = $this->generateEAN13();
     }
 
+    // 🔽 jika upload foto baru
+    if ($request->hasFile('photo')) {
+
+        // hapus foto lama
+        if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+            Storage::disk('public')->delete($product->photo);
+        }
+
+        $validated['photo'] = $request->file('photo')
+                                      ->store('products', 'public');
+    }
+
     $product->update($validated);
 
-    return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
-    }
+    return redirect()->route('products.index')
+        ->with('success', 'Produk berhasil diperbarui!');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        $product = Products::findOrFail($id);
-        $product->delete();
-        return redirect()->route('products.index')->with('success', 'Produk berhasil di hapus!');
+{
+    $product = Products::findOrFail($id);
+
+    // hapus foto
+    if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+        Storage::disk('public')->delete($product->photo);
     }
+
+    $product->delete();
+
+    return redirect()->route('products.index')
+        ->with('success', 'Produk berhasil dihapus!');
+}
+
 }

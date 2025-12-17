@@ -12,7 +12,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row">
@@ -36,6 +36,15 @@
                                 <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $product->price) }}" required>
                             </div>
                         </div>
+
+                        @if (!empty($product->photo))
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Foto Saat Ini</label><br>
+                                <img src="{{ asset('storage/' . $product->photo) }}"
+                                    width="120"
+                                    class="img-thumbnail">
+                            </div>
+                        @endif
 
                         <!-- Stok -->
                         <div class="col-md-6 mb-3">
