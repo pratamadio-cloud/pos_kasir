@@ -37,14 +37,27 @@
                             </div>
                         </div>
 
+                        {{-- FOTO SAAT INI --}}
                         @if (!empty($product->photo))
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Foto Saat Ini</label><br>
-                                <img src="{{ asset('storage/' . $product->photo) }}"
-                                    width="120"
-                                    class="img-thumbnail">
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Foto Saat Ini</label><br>
+                            <img src="{{ asset('storage/' . $product->photo) }}"
+                                width="120"
+                                class="img-thumbnail mb-2">
+                        </div>
                         @endif
+
+                        {{-- INPUT FOTO BARU --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ganti Foto (Opsional)</label>
+                            <input type="file"
+                                name="photo"
+                                class="form-control"
+                                accept="image/*">
+                            <small class="text-muted">
+                                Kosongkan jika tidak ingin mengganti foto
+                            </small>
+                        </div>
 
                         <!-- Stok -->
                         <div class="col-md-6 mb-3">

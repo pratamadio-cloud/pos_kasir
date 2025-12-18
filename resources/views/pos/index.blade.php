@@ -52,13 +52,13 @@
                                 </form>
                                 
                                 <!-- Product Badge -->
-                                @if($item->stock <= 10)
+                                @if($item->stock <= 20)
                                 <div class="position-absolute top-0 end-0 m-2">
                                     <span class="badge bg-danger bg-opacity-90 text-white">
                                         <i class="bi bi-exclamation-triangle-fill me-1"></i>Hampir Habis
                                     </span>
                                 </div>
-                                @elseif($item->stock >= 11)
+                                @elseif($item->stock >= 21)
                                 <div class="position-absolute top-0 end-0 m-2">
                                     <span class="badge bg-success bg-opacity-90 text-white">
                                         <i class="bi bi-check-circle-fill me-1"></i>Tersedia

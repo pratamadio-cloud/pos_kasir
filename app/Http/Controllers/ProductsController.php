@@ -133,40 +133,42 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    $product = Products::findOrFail($id);
+    {
+        $product = Products::findOrFail($id);
 
-    $validated = $request->validate([
-        'barcode' => 'nullable|digits:13|unique:products,barcode,' . $product->id,
-        'name' => 'required',
-        'price' => 'required|numeric',
-        'stock' => 'required|integer',
-        'category_id' => 'required|exists:category,id',
-        'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+        $validated = $request->validate([
+            'barcode'     => 'nullable|digits:13|unique:products,barcode,' . $product->id,
+            'name'        => 'required',
+            'price'       => 'required|numeric',
+            'stock'       => 'required|integer',
+            'category_id' => 'required|exists:category,id',
+            'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    // barcode otomatis
-    if (empty($validated['barcode'])) {
-        $validated['barcode'] = $this->generateEAN13();
-    }
-
-    // 🔽 jika upload foto baru
-    if ($request->hasFile('photo')) {
-
-        // hapus foto lama
-        if ($product->photo && Storage::disk('public')->exists($product->photo)) {
-            Storage::disk('public')->delete($product->photo);
+        // ===== BARCODE =====
+        if (empty($validated['barcode'])) {
+            $validated['barcode'] = $this->generateEAN13();
         }
 
-        $validated['photo'] = $request->file('photo')
-                                      ->store('products', 'public');
+        // ===== FOTO =====
+        if ($request->hasFile('photo')) {
+
+            // hapus foto lama jika ada
+            if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+                Storage::disk('public')->delete($product->photo);
+            }
+
+            // simpan foto baru
+            $validated['photo'] = $request->file('photo')
+                ->store('products', 'public');
+        }
+
+        $product->update($validated);
+
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Produk berhasil diperbarui');
     }
-
-    $product->update($validated);
-
-    return redirect()->route('products.index')
-        ->with('success', 'Produk berhasil diperbarui!');
-}
 
 
     /**
