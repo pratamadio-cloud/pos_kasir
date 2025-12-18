@@ -37,6 +37,27 @@
                             </div>
                         </div>
 
+                        
+
+                        <!-- Stok -->
+                        <div class="col-md-6 mb-3">
+                            <label for="stock" class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock', $product->stock) }}" required>
+                        </div>
+
+                        <!-- Kategori -->
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">Kategori</label>
+                            <select name="category_id" class="form-select" id="category">
+                                @foreach ($category as $c)
+                                <option value="{{ $c->id }}"
+                                    {{ $product->category_id == $c->id ? 'selected' : '' }}>
+                                    {{ $c->category_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         {{-- FOTO SAAT INI --}}
                         @if (!empty($product->photo))
                         <div class="col-md-6 mb-3">
@@ -57,25 +78,6 @@
                             <small class="text-muted">
                                 Kosongkan jika tidak ingin mengganti foto
                             </small>
-                        </div>
-
-                        <!-- Stok -->
-                        <div class="col-md-6 mb-3">
-                            <label for="stock" class="form-label">Stok</label>
-                            <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock', $product->stock) }}" required>
-                        </div>
-
-                        <!-- Kategori -->
-                        <div class="col-md-6 mb-3">
-                            <label for="category" class="form-label">Kategori</label>
-                            <select name="category_id" class="form-select" id="category">
-                                @foreach ($category as $c)
-                                <option value="{{ $c->id }}"
-                                    {{ $product->category_id == $c->id ? 'selected' : '' }}>
-                                    {{ $c->category_name }}
-                                </option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
 
