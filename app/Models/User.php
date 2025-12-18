@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Transactions;
+use App\Models\Transaction;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,7 +42,7 @@ class User extends Authenticatable
      */
     public function transactions()
     {
-        return $this->hasMany(Transactions::class, 'cashier_id');
+        return $this->hasMany(Transaction::class, 'cashier_id');
     }
 
     /**

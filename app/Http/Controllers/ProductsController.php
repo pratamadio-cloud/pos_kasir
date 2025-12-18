@@ -129,10 +129,10 @@ class ProductsController extends Controller
         return view('products.edit', compact('product', 'category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+  /**
+ * Update the specified resource in storage.
+ */
+public function update(Request $request, $id)
 {
     $product = Products::findOrFail($id);
 
@@ -143,6 +143,7 @@ class ProductsController extends Controller
         'stock'       => 'required|integer',
         'category_id' => 'required|exists:category,id',
         'photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'delete_photo' => 'nullable|boolean',
     ]);
 
     // ===== BARCODE =====
@@ -150,9 +151,16 @@ class ProductsController extends Controller
         $validated['barcode'] = $this->generateEAN13();
     }
 
-    // ===== FOTO =====
-    if ($request->hasFile('photo')) {
-
+    // ===== HAPUS FOTO SAAT INI JIKA DI CHECKBOX =====
+    if ($request->has('delete_photo') && $request->delete_photo == '1') {
+        // hapus foto lama jika ada
+        if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+            Storage::disk('public')->delete($product->photo);
+        }
+        $validated['photo'] = null;
+    }
+    // ===== FOTO BARU =====
+    else if ($request->hasFile('photo')) {
         // hapus foto lama jika ada
         if ($product->photo && Storage::disk('public')->exists($product->photo)) {
             Storage::disk('public')->delete($product->photo);
@@ -161,6 +169,9 @@ class ProductsController extends Controller
         // simpan foto baru
         $validated['photo'] = $request->file('photo')
             ->store('products', 'public');
+    } else {
+        // jika tidak ada file baru dan tidak menghapus foto, pertahankan foto lama
+        $validated['photo'] = $product->photo;
     }
 
     $product->update($validated);

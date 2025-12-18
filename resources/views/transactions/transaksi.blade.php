@@ -1,8 +1,8 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('title', 'Transaksi Hari Ini')
 
-@section('content')
+@section('')
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -545,4 +545,4 @@
         }
     });
 </script>
-@endsection
+@endsection --}}

@@ -10,7 +10,6 @@
     </div>
 </div>
 
-
 <!-- Compact Summary Cards -->
 <div class="row mb-3 g-2">
     <div class="col-md-3 col-6">
@@ -25,10 +24,7 @@
                     <div class="flex-grow-1 ms-2">
                         <small class="text-muted">Total Transaksi</small>
                         <div class="d-flex align-items-center">
-                            <h6 class="mb-0">1,248</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 8.3%
-                            </small>
+                            <h6 class="mb-0">{{ number_format($summary['total_transactions']) }}</h6>
                         </div>
                     </div>
                 </div>
@@ -47,10 +43,7 @@
                     <div class="flex-grow-1 ms-2">
                         <small class="text-muted">Total Pendapatan</small>
                         <div class="d-flex align-items-center">
-                            <h6 class="mb-0">42.5 Jt</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 12.5%
-                            </small>
+                            <h6 class="mb-0">RP {{ number_format($summary['total_revenue'], 0, ',', '.') }}</h6>
                         </div>
                     </div>
                 </div>
@@ -69,10 +62,7 @@
                     <div class="flex-grow-1 ms-2">
                         <small class="text-muted">Produk Terjual</small>
                         <div class="d-flex align-items-center">
-                            <h6 class="mb-0">5,420</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 15.2%
-                            </small>
+                            <h6 class="mb-0">{{ number_format($summary['total_items_sold']) }}</h6>
                         </div>
                     </div>
                 </div>
@@ -91,10 +81,7 @@
                     <div class="flex-grow-1 ms-2">
                         <small class="text-muted">Rata-rata/Transaksi</small>
                         <div class="d-flex align-items-center">
-                            <h6 class="mb-0">34,118</h6>
-                            <small class="text-success ms-1">
-                                <i class="bi bi-arrow-up-right"></i> 3.8%
-                            </small>
+                            <h6 class="mb-0">RP {{ number_format($summary['average_per_transaction'], 0, ',', '.') }}</h6>
                         </div>
                     </div>
                 </div>
@@ -102,7 +89,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Report Type Buttons -->
 <div class="row mb-3">
@@ -151,31 +137,35 @@
     <div class="col-md-12">
         <div class="card dashboard-card">
             <div class="card-body p-3">
-                <div class="row g-2 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label small mb-1">Periode</label>
-                        <select class="form-select form-select-sm" id="reportPeriod">
-                            <option value="today">Hari Ini</option>
-                            <option value="yesterday">Kemarin</option>
-                            <option value="week" selected>Minggu Ini</option>
-                            <option value="month">Bulan Ini</option>
-                            <option value="custom">Kustom</option>
-                        </select>
+                <form method="GET" action="{{ route('admin.reports') }}" id="reportForm">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label small mb-1">Periode</label>
+                            <select class="form-select form-select-sm" name="period" id="reportPeriod">
+                                <option value="today" {{ $period == 'today' ? 'selected' : '' }}>Hari Ini</option>
+                                <option value="yesterday" {{ $period == 'yesterday' ? 'selected' : '' }}>Kemarin</option>
+                                <option value="week" {{ $period == 'week' ? 'selected' : '' }}>Minggu Ini</option>
+                                <option value="month" {{ $period == 'month' ? 'selected' : '' }}>Bulan Ini</option>
+                                <option value="custom" {{ $period == 'custom' ? 'selected' : '' }}>Kustom</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" id="customDateRange" style="{{ $period == 'custom' ? 'display: block;' : 'display: none;' }}">
+                            <label class="form-label small mb-1">Dari Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" name="start_date" 
+                                   value="{{ $startDate ? $startDate->format('Y-m-d') : '' }}">
+                        </div>
+                        <div class="col-md-3" id="customDateRange2" style="{{ $period == 'custom' ? 'display: block;' : 'display: none;' }}">
+                            <label class="form-label small mb-1">Sampai Tanggal</label>
+                            <input type="date" class="form-control form-control-sm" name="end_date"
+                                   value="{{ $endDate ? $endDate->format('Y-m-d') : '' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-outline-light btn-admin btn-sm w-100" id="generateReport">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Generate
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-3" id="customDateRange" style="display: none;">
-                        <label class="form-label small mb-1">Dari Tanggal</label>
-                        <input type="date" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-md-3" id="customDateRange2" style="display: none;">
-                        <label class="form-label small mb-1">Sampai Tanggal</label>
-                        <input type="date" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-outline-light btn-admin btn-sm w-100" id="generateReport">
-                            <i class="bi bi-arrow-clockwise me-1"></i>Generate
-                        </button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -188,6 +178,9 @@
             <div class="card-header d-flex justify-content-between align-items-center py-2">
                 <h5 class="mb-0" style="font-size: 1rem;">
                     <i class="bi bi-receipt me-1"></i>Data Transaksi
+                    <small class="text-muted ms-2">
+                        ({{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }})
+                    </small>
                 </h5>
                 <div>
                     <button class="btn btn-outline-secondary btn-sm me-1" onclick="window.print()">
@@ -196,6 +189,7 @@
                     <button class="btn btn-outline-light btn-admin btn-sm">
                         <i class="bi bi-download me-1"></i>Export
                     </button>
+                   
                 </div>
             </div>
             <div class="card-body p-0">
@@ -209,77 +203,103 @@
                                 <th>Items</th>
                                 <th>Total</th>
                                 <th>Metode</th>
-                                <th class="pe-3">Aksi</th> <!-- PERBAIKAN DI SINI -->
+                                <th class="pe-3">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for($i = 1; $i <= 10; $i++)
-                            @php
-                                $cashiers = ['Kasir-1', 'Kasir-2', 'Kasir-3', 'Admin'];
-                                $cashier = $cashiers[array_rand($cashiers)];
-                                $methods = [
-                                    ['bg-success', 'Tunai'],
-                                    ['bg-primary', 'QRIS'],
-                                    ['bg-dark', 'Transfer']
-                                ];
-                                $method = $methods[array_rand($methods)];
-                            @endphp
+                            @forelse($transactions as $transaction)
                             <tr>
                                 <td class="ps-3">
-                                    <strong class="small">INV-2024-00{{ 130 - $i }}</strong>
-                                    <br><small class="text-muted">#T{{ 130 - $i }}</small>
+                                    <strong class="small">{{ $transaction->invoice_no }}</strong>
+                                    <br><small class="text-muted">#{{ $transaction->id }}</small>
                                 </td>
                                 <td>
-                                    <span class="small">{{ date('d/m/Y', strtotime("-$i days")) }}</span>
-                                    <br><small class="text-muted">{{ date('H:i', strtotime("+$i hours")) }}</small>
+                                    <span class="small">{{ $transaction->created_at->format('d/m/Y') }}</span>
+                                    <br><small class="text-muted">{{ $transaction->created_at->format('H:i') }}</small>
                                 </td>
                                 <td>
-                                    <span class="badge bg-info">{{ $cashier }}</span>
+                                    <span class="badge bg-info">{{ $transaction->cashier->name ?? 'Kasir' }}</span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-secondary">{{ rand(1, 8) }} items</span>
+                                    <span class="badge bg-secondary">{{ $transaction->items->sum('qty') }} items</span>
                                 </td>
                                 <td>
-                                    <strong class="small">RP {{ number_format(rand(10000, 200000), 0, ',', '.') }}</strong>
+                                    <strong class="small">RP {{ number_format($transaction->total, 0, ',', '.') }}</strong>
                                 </td>
                                 <td>
-                                    <span class="badge {{ $method[0] }}">{{ $method[1] }}</span>
+                                    @php
+                                        $methodColors = [
+                                            'cash' => 'bg-success',
+                                            'qris' => 'bg-info',
+                                            'transfer' => 'bg-primary'
+                                        ];
+                                        $methodLabels = [
+                                            'cash' => 'Tunai',
+                                            'qris' => 'QRIS',
+                                            'transfer' => 'Transfer'
+                                        ];
+                                    @endphp
+                                    <span class="badge {{ $methodColors[$transaction->payment_method] ?? 'bg-secondary' }}">
+                                        {{ $methodLabels[$transaction->payment_method] ?? $transaction->payment_method }}
+                                    </span>
                                 </td>
                                 <td class="pe-3">
-                                    <button class="btn btn-sm btn-outline-primary py-0 px-2">
-                                        <i class="bi bi-eye small"></i>
-                                    </button>
+                                    <a href="{{ route('admin.transactions-detail', $transaction->id) }}" 
+                                       class="btn btn-sm btn-outline-primary" title="Lihat Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
-                            @endfor
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-3">Tidak ada data transaksi pada periode ini</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Pagination -->
+                @if($transactions->hasPages())
                 <div class="p-2">
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm justify-content-center mb-0">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">‹</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">›</a>
-                            </li>
+                            {{-- Previous Page Link --}}
+                            @if($transactions->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $transactions->previousPageUrl() }}">&laquo;</a>
+                                </li>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @for($i = 1; $i <= $transactions->lastPage(); $i++)
+                                <li class="page-item {{ $transactions->currentPage() == $i ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $transactions->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+
+                            {{-- Next Page Link --}}
+                            @if($transactions->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $transactions->nextPageUrl() }}">&raquo;</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                            @endif
                         </ul>
                     </nav>
                 </div>
+                @endif
             </div>
         </div>
     </div>
 </div>
-
-
 
 <!-- Charts - SAME HEIGHT -->
 <div class="row g-2">
@@ -287,6 +307,15 @@
         <div class="card dashboard-card h-100">
             <div class="card-header py-2 px-3">
                 <h5 class="mb-0" style="font-size: 0.95rem;">Trend Penjualan</h5>
+                <small class="text-muted">
+                    @if($period == 'week')
+                        Minggu Ini
+                    @elseif($period == 'month')
+                        Bulan Ini
+                    @else
+                        Periode {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}
+                    @endif
+                </small>
             </div>
             <div class="card-body p-2" style="min-height: 180px;">
                 <canvas id="salesChart" height="130"></canvas>
@@ -297,6 +326,7 @@
         <div class="card dashboard-card h-100">
             <div class="card-header py-2 px-3">
                 <h5 class="mb-0" style="font-size: 0.95rem;">Metode Pembayaran</h5>
+                <small class="text-muted">Distribusi berdasarkan metode</small>
             </div>
             <div class="card-body p-2 d-flex align-items-center justify-content-center" style="min-height: 180px;">
                 <canvas id="paymentChart" height="130"></canvas>
@@ -314,13 +344,16 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Sales Chart
         const salesCtx = document.getElementById('salesChart').getContext('2d');
+        const salesLabels = @json(collect($salesChartData)->pluck('label'));
+        const salesData = @json(collect($salesChartData)->pluck('revenue'));
+        
         salesChart = new Chart(salesCtx, {
             type: 'bar',
             data: {
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                labels: salesLabels,
                 datasets: [{
                     label: 'Pendapatan (RP)',
-                    data: [4200000, 3800000, 4500000, 5200000, 4800000, 5500000, 4250000],
+                    data: salesData,
                     backgroundColor: '#4361ee',
                     borderColor: '#3f37c9',
                     borderWidth: 1
@@ -334,7 +367,13 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return 'RP ' + (value/1000000).toFixed(1) + ' jt';
+                                if (value >= 1000000) {
+                                    return 'RP ' + (value/1000000).toFixed(1) + ' jt';
+                                } else if (value >= 1000) {
+                                    return 'RP ' + (value/1000).toFixed(0) + ' rb';
+                                } else {
+                                    return 'RP ' + value;
+                                }
                             },
                             font: {
                                 size: 9
@@ -359,23 +398,33 @@
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'RP ' + context.raw.toLocaleString('id-ID');
+                            }
+                        }
                     }
                 }
             }
         });
 
-        // Payment Chart - Transfer warna biru hitam (#212529)
+        // Payment Chart
         const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+        const paymentLabels = @json($paymentChartData['labels'] ?? []);
+        const paymentCounts = @json($paymentChartData['counts'] ?? []);
+        
         paymentChart = new Chart(paymentCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Tunai', 'QRIS', 'Transfer'],
+                labels: paymentLabels,
                 datasets: [{
-                    data: [65, 25, 10],
+                    data: paymentCounts,
                     backgroundColor: [
                         '#28a745',    // Hijau untuk Tunai
-                        '#007bff',    // Biru untuk QRIS
-                        '#212529'     // Biru Hitam untuk Transfer
+                        '#00FFFF',    // Biru untuk QRIS
+                        '#0000FF'     // Biru Hitam untuk Transfer
                     ],
                     borderWidth: 0
                 }]
@@ -393,6 +442,15 @@
                                 size: 9
                             }
                         }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = paymentCounts.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? Math.round((context.raw / total) * 100) : 0;
+                                return `${context.label}: ${context.raw} transaksi (${percentage}%)`;
+                            }
+                        }
                     }
                 },
                 cutout: '50%'
@@ -408,52 +466,58 @@
         if (this.value === 'custom') {
             customRange.style.display = 'block';
             customRange2.style.display = 'block';
+            
+            // Set default dates jika kosong
+            const today = new Date().toISOString().split('T')[0];
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const weekAgoStr = weekAgo.toISOString().split('T')[0];
+            
+            if (!customRange.querySelector('input').value) {
+                customRange.querySelector('input').value = weekAgoStr;
+            }
+            if (!customRange2.querySelector('input').value) {
+                customRange2.querySelector('input').value = today;
+            }
         } else {
             customRange.style.display = 'none';
             customRange2.style.display = 'none';
+            
+            // Auto submit saat pilih periode non-custom
+            document.getElementById('reportForm').submit();
         }
-    });
-
-    // Generate report
-    document.getElementById('generateReport').addEventListener('click', function() {
-        const period = document.getElementById('reportPeriod').value;
-        
-        // Simulate loading
-        const btn = this;
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Loading...';
-        btn.disabled = true;
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            alert(`Laporan untuk periode ${period} berhasil dibuat!`);
-        }, 1500);
     });
 
     // Report type buttons functionality
     document.querySelectorAll('.btn-report-type').forEach(button => {
         button.addEventListener('click', function() {
             const reportType = this.getAttribute('data-type');
-            const periodSelect = document.getElementById('reportPeriod');
+            let url = '';
             
             switch(reportType) {
                 case 'daily':
-                    periodSelect.value = 'today';
+                    url = "{{ route('admin.reports.daily') }}";
                     break;
                 case 'weekly':
-                    periodSelect.value = 'week';
+                    url = "{{ route('admin.reports.weekly') }}";
                     break;
                 case 'monthly':
-                    periodSelect.value = 'month';
+                    url = "{{ route('admin.reports.monthly') }}";
                     break;
             }
             
-            // Trigger change event to update custom date display
-            periodSelect.dispatchEvent(new Event('change'));
-            
-            // Simulate generating report
-            document.getElementById('generateReport').click();
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+
+    // Auto submit saat date input berubah
+    document.querySelectorAll('#customDateRange input, #customDateRange2 input').forEach(input => {
+        input.addEventListener('change', function() {
+            if (document.getElementById('reportPeriod').value === 'custom') {
+                document.getElementById('reportForm').submit();
+            }
         });
     });
 </script>

@@ -301,15 +301,16 @@
                     </a>
                 </li>
                 
+                <!-- PERBAIKAN: Menu Produk untuk Admin -->
                 <li class="nav-item">
                     <a class="nav-link @if(Request::is('admin/products*')) active @endif" 
-                       href="/admin/products">
+                       href="{{ route('admin.products.index') }}">
                         <i class="bi bi-box-seam"></i>
-                        <span class="nav-text">Produk</span>
+                        <span class="nav-text">Manajemen Produk</span>
                     </a>
                 </li>
                 
-                <!-- MENU TRANSAKSI BARU -->
+                <!-- Menu Transaksi -->
                 <li class="nav-item">
                     <a class="nav-link @if(Request::is('admin/transactions*')) active @endif" 
                        href="/admin/transactions">
@@ -327,10 +328,18 @@
                 </li>
                 
                 <!-- Divider -->
-                <li class="  btn-outline-light nav-item mt-4">
-                    <div class=" nav-link text small">
-                        <span class=" nav-text">AKSI CEPAT</span>
+                <li class="nav-item mt-4">
+                    <div class="nav-link text-muted small">
+                        <span class="nav-text">AKSI CEPAT</span>
                     </div>
+                </li>
+                
+                <!-- PERBAIKAN: Link ke halaman produk kasir (bukan admin) -->
+                {{-- <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">
+                        <i class="bi bi-cart"></i>
+                        <span class="nav-text">Produk (Kasir)</span>
+                    </a>
                 </li>
                 
                 <li class="nav-item">
@@ -338,9 +347,9 @@
                         <i class="bi bi-cash-register"></i>
                         <span class="nav-text">Ke Kasir</span>
                     </a>
-                </li>
+                </li> --}}
                 
-                <li class="nav-item">
+                   <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button class="nav-link text-danger">
@@ -354,7 +363,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" id="mainContent">
+      <div class="main-content" id="mainContent">
         <!-- Top Navbar -->
         <div class="top-navbar">
             <div class="page-title">
@@ -383,7 +392,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p class="mb-0">
-                        &copy; 2024 POS Kasir System v2.0
+                        &copy; 2025 POS Kasir System v2.0
                     </p>
                 </div>
                 <div class="col-md-6 text-end">
@@ -461,7 +470,11 @@
             
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === currentPath) {
+                // Check both href and route
+                const href = link.getAttribute('href');
+                if (href === currentPath || 
+                    (currentPath.includes('/admin/products') && href.includes('/admin/products')) ||
+                    (currentPath.includes('/products') && href.includes('/products') && !href.includes('/admin'))) {
                     link.classList.add('active');
                 }
             });

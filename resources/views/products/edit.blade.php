@@ -65,6 +65,14 @@
                             <img src="{{ asset('storage/' . $product->photo) }}"
                                 width="120"
                                 class="img-thumbnail mb-2">
+                            
+                            {{-- TOMBOL HAPUS FOTO SAAT INI --}}
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="delete_photo" id="deletePhoto" value="1">
+                                <label class="form-check-label text-danger" for="deletePhoto">
+                                    <i class="bi bi-trash me-1"></i> Hapus foto saat ini
+                                </label>
+                            </div>
                         </div>
                         @endif
 

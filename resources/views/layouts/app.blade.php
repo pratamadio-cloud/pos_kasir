@@ -103,7 +103,9 @@
     @stack('styles')
 </head>
 <body>
-   <!-- Navbar -->
+
+
+  <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -116,21 +118,22 @@
         
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item me-4">  <!-- Jarak kanan 4 unit -->
+                <li class="nav-item me-4">
                     <a class="nav-link" href="/pos">
-                        <i class="bi bi-person me-2"></i>Kasir
+                        <i class="bi bi-cash-coin me-2"></i>POS
                     </a>
                 </li>
-                <li class="nav-item me-4">  <!-- Jarak kanan 4 unit -->
+                <li class="nav-item me-4">
                     <a class="nav-link" href="/products">
                         <i class="bi bi-box-seam me-2"></i>Produk
                     </a>
                 </li>
-                <li class="nav-item">  <!-- Item terakhir tidak perlu margin kanan -->
-                    <a class="nav-link" href="/transactions">
-                        <i class="bi bi-clock-history me-2"></i>Riwayat
+                <li class="nav-item me-4">
+                    <a class="nav-link" href="/transactions/today">
+                        <i class="bi bi-receipt me-2"></i>Transaksi Hari Ini
                     </a>
                 </li>
+                
             </ul>
 
             {{-- Live Clock --}}
