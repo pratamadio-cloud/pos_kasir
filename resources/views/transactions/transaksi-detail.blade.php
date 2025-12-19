@@ -103,7 +103,7 @@
                             <div class="mb-3">
                                 <label class="text-muted small mb-1">Kasir</label>
                                 <p class="mb-0">
-                                    <span class="badge bg-info bg-opacity-10 text-info">
+                                    <span class="badge bg-info">
                                         {{ $transaction->cashier->name ?? 'Kasir' }}
                                     </span>
                                 </p>

@@ -275,7 +275,12 @@
         </div>
     </div>
 </div>
-
+<!-- Back Button -->
+<div class="mt-4">
+    <a href="/admin/transactions" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar Transaksi
+    </a>
+</div>
         </div>
 
         <!-- Receipt Preview -->
