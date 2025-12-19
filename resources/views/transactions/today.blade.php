@@ -167,77 +167,134 @@
                     </div>
                 </div>
 
-                        <!-- Transactions List -->
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th width="60">No</th>
-                                        <th>Waktu</th>
-                                        <th>Invoice</th>
-                                        <th>Items</th>
-                                        <th>Total</th>
-                                        <th>Metode</th>
-                                        <th width="100">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="transactionsBody">
-                                    @forelse($transactions as $index => $transaction)
-                                    @php
-                                        $hour = $transaction->created_at->hour;
-                                        $timeClass = 'time-morning';
-                                        if ($hour >= 12 && $hour < 16) {
-                                            $timeClass = 'time-afternoon';
-                                        } elseif ($hour >= 16) {
-                                            $timeClass = 'time-evening';
-                                        }
-                                        
-                                        $methodColors = [
-                                            'cash' => 'bg-success',
-                                            'qris' => 'bg-info',
-                                            'transfer' => 'bg-primary'
-                                        ];
-                                        $methodLabels = [
-                                            'cash' => 'Tunai',
-                                            'qris' => 'QRIS',
-                                            'transfer' => 'Transfer'
-                                        ];
-                                    @endphp
-                                    <tr class="transaction-row">
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            <span class="time-badge {{ $timeClass }}">
-                                                <i class="bi bi-clock me-1"></i>{{ $transaction->created_at->format('H:i') }}
-                                            </span>
-                                        </td>
-                                        <td><strong>{{ $transaction->invoice_no }}</strong></td>
-                                        <td><span class="badge bg-secondary">{{ $transaction->items->sum('qty') }} items</span></td>
-                                        <td><strong>Rp {{ number_format($transaction->total, 0, ',', '.') }}</strong></td>
-                                        <td>
-                                            <span class="badge {{ $methodColors[$transaction->payment_method] ?? 'bg-secondary' }}">
-                                                {{ $methodLabels[$transaction->payment_method] ?? $transaction->payment_method }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <!-- PERUBAHAN DI SINI -->
-                                            <a href="{{ route('transactions.show', $transaction->id) }}" 
-                                            class="btn btn-sm btn-outline-primary" title="Lihat Detail">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center py-4">
-                                            <i class="bi bi-receipt text-muted" style="font-size: 3rem;"></i>
-                                            <h5 class="mt-3">Belum ada transaksi hari ini</h5>
-                                            <p class="text-muted">Transaksi yang Anda lakukan akan muncul di sini</p>
-                                        </td>
-                                    </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- Transactions List -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="60">No</th>
+                                <th>Waktu</th>
+                                <th>Invoice</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Metode</th>
+                                <th width="100">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsBody">
+                            @forelse($transactions as $index => $transaction)
+                            @php
+                                $hour = $transaction->created_at->hour;
+                                $timeClass = 'time-morning';
+                                if ($hour >= 12 && $hour < 16) {
+                                    $timeClass = 'time-afternoon';
+                                } elseif ($hour >= 16) {
+                                    $timeClass = 'time-evening';
+                                }
+                                
+                                $methodColors = [
+                                    'cash' => 'bg-success',
+                                    'qris' => 'bg-info',
+                                    'transfer' => 'bg-primary'
+                                ];
+                                $methodLabels = [
+                                    'cash' => 'Tunai',
+                                    'qris' => 'QRIS',
+                                    'transfer' => 'Transfer'
+                                ];
+                            @endphp
+                            <tr class="transaction-row">
+                                <td>{{ ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->iteration }}</td>
+                                <td>
+                                    <span class="time-badge {{ $timeClass }}">
+                                        <i class="bi bi-clock me-1"></i>{{ $transaction->created_at->format('H:i') }}
+                                    </span>
+                                </td>
+                                <td><strong>{{ $transaction->invoice_no }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ $transaction->items->sum('qty') }} items</span></td>
+                                <td><strong>Rp {{ number_format($transaction->total, 0, ',', '.') }}</strong></td>
+                                <td>
+                                    <span class="badge {{ $methodColors[$transaction->payment_method] ?? 'bg-secondary' }}">
+                                        {{ $methodLabels[$transaction->payment_method] ?? $transaction->payment_method }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('transactions.show', $transaction->id) }}" 
+                                    class="btn btn-sm btn-outline-primary" title="Lihat Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <i class="bi bi-receipt text-muted" style="font-size: 3rem;"></i>
+                                    <h5 class="mt-3">Belum ada transaksi hari ini</h5>
+                                    <p class="text-muted">Transaksi yang Anda lakukan akan muncul di sini</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination Section - Ditambahkan di sini -->
+                @if($transactions->hasPages())
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="text-muted">
+                        Menampilkan <strong>{{ $transactions->firstItem() ?? 0 }}</strong> 
+                        sampai <strong>{{ $transactions->lastItem() ?? 0 }}</strong> 
+                        dari <strong>{{ $transactions->total() }}</strong> transaksi
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($transactions->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-left"></i>
+                                </span>
+                            </li>
+                            @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $transactions->previousPageUrl() }}" aria-label="Previous">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                            @endif
+
+                            {{-- Pagination Elements --}}
+                            @foreach ($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
+                                @if ($page == $transactions->currentPage())
+                                <li class="page-item active">
+                                    <span class="page-link">{{ $page }}</span>
+                                </li>
+                                @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                                @endif
+                            @endforeach
+
+                            {{-- Next Page Link --}}
+                            @if ($transactions->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $transactions->nextPageUrl() }}" aria-label="Next">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                            @else
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
+                            </li>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
+                @endif
+                <!-- End Pagination Section -->
             </div>
         </div>
     </div>
@@ -379,6 +436,21 @@
     /* Empty state styling */
     .bi-receipt {
         opacity: 0.5;
+    }
+    
+    /* Pagination styling */
+    .pagination {
+        margin-bottom: 0;
+    }
+    
+    .page-link {
+        color: #4361ee;
+        border-color: #dee2e6;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #4361ee;
+        border-color: #4361ee;
     }
 </style>
 @endsection

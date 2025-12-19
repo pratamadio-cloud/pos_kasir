@@ -161,40 +161,88 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
+                <!-- Pagination - Diperbarui -->
                 @if($transactions->hasPages())
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        {{-- Previous Page Link --}}
-                        @if($transactions->onFirstPage())
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="text-muted">
+                        Menampilkan <strong>{{ $transactions->firstItem() ?? 0 }}</strong> 
+                        sampai <strong>{{ $transactions->lastItem() ?? 0 }}</strong> 
+                        dari <strong>{{ $transactions->total() }}</strong> transaksi
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0">
+                            {{-- Previous Page Link --}}
+                            @if ($transactions->onFirstPage())
                             <li class="page-item disabled">
-                                <span class="page-link">Previous</span>
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-left"></i>
+                                </span>
                             </li>
-                        @else
+                            @else
                             <li class="page-item">
-                                <a class="page-link" href="{{ $transactions->previousPageUrl() }}&{{ http_build_query(request()->except('page')) }}">Previous</a>
+                                <a class="page-link" href="{{ $transactions->previousPageUrl() }}" aria-label="Previous">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
                             </li>
-                        @endif
+                            @endif
 
-                        {{-- Pagination Elements --}}
-                        @for($i = 1; $i <= $transactions->lastPage(); $i++)
-                            <li class="page-item {{ $transactions->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $transactions->url($i) }}&{{ http_build_query(request()->except('page')) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
+                            {{-- Pagination Elements --}}
+                            @php
+                                $current = $transactions->currentPage();
+                                $last = $transactions->lastPage();
+                                $start = max(1, $current - 2);
+                                $end = min($last, $start + 4);
+                                
+                                if ($end - $start < 4) {
+                                    $start = max(1, $end - 4);
+                                }
+                            @endphp
+                            
+                            @if($start > 1)
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $transactions->url(1) }}">1</a>
+                                </li>
+                                @if($start > 2)
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                                @endif
+                            @endif
+                            
+                            @for ($i = $start; $i <= $end; $i++)
+                                <li class="page-item {{ $i == $current ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $transactions->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            
+                            @if($end < $last)
+                                @if($end < $last - 1)
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                                @endif
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $transactions->url($last) }}">{{ $last }}</a>
+                                </li>
+                            @endif
 
-                        {{-- Next Page Link --}}
-                        @if($transactions->hasMorePages())
+                            {{-- Next Page Link --}}
+                            @if ($transactions->hasMorePages())
                             <li class="page-item">
-                                <a class="page-link" href="{{ $transactions->nextPageUrl() }}&{{ http_build_query(request()->except('page')) }}">Next</a>
+                                <a class="page-link" href="{{ $transactions->nextPageUrl() }}" aria-label="Next">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
                             </li>
-                        @else
+                            @else
                             <li class="page-item disabled">
-                                <span class="page-link">Next</span>
+                                <span class="page-link">
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
                             </li>
-                        @endif
-                    </ul>
-                </nav>
+                            @endif
+                        </ul>
+                    </nav>
+                </div>
                 @endif
             </div>
         </div>
@@ -408,15 +456,32 @@
     }
     
     /* Pagination styling */
+    .pagination {
+        margin-bottom: 0;
+    }
+    
     .pagination .page-link {
         border-radius: 6px;
         margin: 0 3px;
         border: 1px solid #dee2e6;
+        color: #4361ee;
     }
     
     .pagination .page-item.active .page-link {
         background-color: #4361ee;
         border-color: #4361ee;
+        color: white;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+    
+    /* Pagination info */
+    .text-muted strong {
+        color: #495057;
     }
     
     /* Select multiple styling */

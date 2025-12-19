@@ -50,11 +50,11 @@ class ReportController extends Controller
                 $endDate = Carbon::now()->endOfWeek();
         }
 
-        // Get transactions
+        // Get transactions - pagination 8 transaksi per halaman
         $transactions = Transaction::with(['items', 'cashier'])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(8); // PERUBAHAN: paginate(8) bukan paginate(10)
 
         // Calculate summary
         $summary = $this->calculateSummary($startDate, $endDate);
@@ -205,7 +205,7 @@ class ReportController extends Controller
         $transactions = Transaction::with(['items', 'cashier'])
             ->whereDate('created_at', $date)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(8); // PERUBAHAN: paginate(8) bukan paginate(10)
             
         $summary = $this->calculateSummary($date->startOfDay(), $date->endOfDay());
         
@@ -259,7 +259,7 @@ class ReportController extends Controller
         $transactions = Transaction::with(['items', 'cashier'])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(8); // PERUBAHAN: paginate(8) bukan paginate(10)
             
         $summary = $this->calculateSummary($startDate, $endDate);
         $salesChartData = $this->getSalesChartData($startDate, $endDate, 'week');
@@ -287,7 +287,7 @@ class ReportController extends Controller
         $transactions = Transaction::with(['items', 'cashier'])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(8); // PERUBAHAN: paginate(8) bukan paginate(10)
             
         $summary = $this->calculateSummary($startDate, $endDate);
         $salesChartData = $this->getSalesChartData($startDate, $endDate, 'month');
@@ -369,8 +369,6 @@ class ReportController extends Controller
             default: // date_desc
                 $query->orderBy('created_at', 'desc');
         }
-
-        
         
         // Get unique cashiers for filter dropdown
         $cashiers = Transaction::select('cashier_id')
@@ -381,7 +379,8 @@ class ReportController extends Controller
             ->pluck('cashier')
             ->filter();
         
-        $transactions = $query->paginate(15);
+        // PERUBAHAN DI SINI: paginate(8) bukan paginate(15)
+        $transactions = $query->paginate(8);
         
         // Calculate summary
         $summary = $this->calculateTransactionsSummary($transactions, $startDate, $endDate);
@@ -400,17 +399,17 @@ class ReportController extends Controller
         ));
     }
 
-public function transactionDetail($id)
-{
-    $transaction = Transaction::with(['items.product', 'cashier'])
-        ->find($id);
-    
-    if (!$transaction) {
-        return view('admin.transactions-detail')->with('error', 'Transaksi tidak ditemukan');
+    public function transactionDetail($id)
+    {
+        $transaction = Transaction::with(['items.product', 'cashier'])
+            ->find($id);
+        
+        if (!$transaction) {
+            return view('admin.transactions-detail')->with('error', 'Transaksi tidak ditemukan');
+        }
+        
+        return view('admin.transactions-detail', compact('transaction'));
     }
-    
-    return view('admin.transactions-detail', compact('transaction'));
-}
     
     /**
      * Helper method untuk menghitung summary transaksi
@@ -504,5 +503,4 @@ public function transactionDetail($id)
         if ($hour >= 16 && $hour < 24) return 'Sore';
         return 'Malam';
     }
-    
 }

@@ -27,20 +27,45 @@ class TransactionsController extends Controller
     {
         $today = Carbon::today();
         
-        // Get transactions untuk hari ini
+        // Query untuk pagination
         $transactions = Transaction::with(['items', 'cashier'])
             ->whereDate('created_at', $today)
             ->orderBy('created_at', 'desc')
-            ->get();
-        
-        // Calculate summary
-        $summary = $this->calculateTodaySummary($transactions);
+            ->paginate(10);
         
         // Get cashier info
         $cashierName = Auth::check() ? Auth::user()->name : 'Kasir';
         
         // Get shift info
         $shiftInfo = $this->getCurrentShift();
+        
+        // Hitung summary menggunakan agregasi database untuk efisiensi
+        $totalTransactions = Transaction::whereDate('created_at', $today)->count();
+        $totalRevenue = Transaction::whereDate('created_at', $today)->sum('total');
+        
+        // Untuk total items terjual, perlu query terpisah
+        $totalItemsSold = TransactionItem::whereHas('transaction', function($query) use ($today) {
+            $query->whereDate('created_at', $today);
+        })->sum('qty');
+        
+        $firstTransaction = Transaction::whereDate('created_at', $today)
+            ->orderBy('created_at', 'asc')
+            ->first();
+        
+        $lastTransaction = Transaction::whereDate('created_at', $today)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        
+        $averagePerTransaction = $totalTransactions > 0 ? $totalRevenue / $totalTransactions : 0;
+        
+        $summary = [
+            'total_transactions' => $totalTransactions,
+            'total_revenue' => $totalRevenue,
+            'total_items_sold' => $totalItemsSold,
+            'average_per_transaction' => $averagePerTransaction,
+            'first_transaction_time' => $firstTransaction ? $firstTransaction->created_at->format('H:i') : '-',
+            'last_transaction_time' => $lastTransaction ? $lastTransaction->created_at->format('H:i') : '-'
+        ];
         
         return view('transactions.today', compact(
             'transactions',
@@ -49,34 +74,6 @@ class TransactionsController extends Controller
             'shiftInfo',
             'today'
         ));
-    }
-    
-    private function calculateTodaySummary($transactions)
-    {
-        $totalTransactions = $transactions->count();
-        $totalRevenue = $transactions->sum('total');
-        
-        // Hitung total items terjual
-        $totalItemsSold = 0;
-        foreach ($transactions as $transaction) {
-            $totalItemsSold += $transaction->items->sum('qty');
-        }
-        
-        // Average per transaction
-        $averagePerTransaction = $totalTransactions > 0 ? $totalRevenue / $totalTransactions : 0;
-        
-        // First and last transaction time
-        $firstTransaction = $transactions->last(); // Karena diorder descending
-        $lastTransaction = $transactions->first();
-        
-        return [
-            'total_transactions' => $totalTransactions,
-            'total_revenue' => $totalRevenue,
-            'total_items_sold' => $totalItemsSold,
-            'average_per_transaction' => $averagePerTransaction,
-            'first_transaction_time' => $firstTransaction ? $firstTransaction->created_at->format('H:i') : '-',
-            'last_transaction_time' => $lastTransaction ? $lastTransaction->created_at->format('H:i') : '-'
-        ];
     }
     
     private function getCurrentShift()
@@ -116,63 +113,62 @@ class TransactionsController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'payment_method' => 'required|in:cash,qris,transfer',
-        'paid' => 'required|numeric|min:0',
-    ]);
-
-    $cart = session('cart');
-
-    if (!$cart || count($cart) === 0) {
-        return redirect('/pos');
-    }
-
-    $total = collect($cart)->sum('subtotal');
-
-    if ($request->paid < $total) {
-        return back()->with('error', 'Uang tidak cukup');
-    }
-
-    $transactionId = null; // Variabel untuk menyimpan ID transaksi
-    
-    DB::transaction(function () use ($request, $cart, $total, &$transactionId) {
-
-        $cashierId = Auth::check() ? Auth::id() : 1;
-
-        $transaction = Transaction::create([
-            'invoice_no' => 'INV-' . now()->format('YmdHis'),
-            'cashier_id' => $cashierId,
-            'total' => $total,
-            'paid' => $request->paid,
-            'change' => $request->paid - $total,
-            'payment_method' => $request->payment_method,
+    {
+        $request->validate([
+            'payment_method' => 'required|in:cash,qris,transfer',
+            'paid' => 'required|numeric|min:0',
         ]);
-        
-        $transactionId = $transaction->id; // Simpan ID transaksi
 
-        foreach ($cart as $item) {
-            TransactionItem::create([
-                'transaction_id' => $transaction->id,
-                'product_id' => $item['product_id'],
-                'qty' => $item['qty'],
-                'price' => $item['price'],
-                'subtotal' => $item['subtotal'],
-            ]);
+        $cart = session('cart');
 
-            // kurangi stok
-            Products::where('id', $item['product_id'])
-                ->decrement('stock', $item['qty']);
+        if (!$cart || count($cart) === 0) {
+            return redirect('/pos');
         }
-    });
 
-    session()->forget('cart');
+        $total = collect($cart)->sum('subtotal');
 
-    // ✅ PERUBAHAN DI SINI: Redirect ke halaman detail transaksi
-    return redirect()->route('transactions.show', $transactionId)
-        ->with('success', 'Transaksi berhasil disimpan!');
-}
-    
+        if ($request->paid < $total) {
+            return back()->with('error', 'Uang tidak cukup');
+        }
+
+        $transactionId = null; // Variabel untuk menyimpan ID transaksi
+        
+        DB::transaction(function () use ($request, $cart, $total, &$transactionId) {
+
+            $cashierId = Auth::check() ? Auth::id() : 1;
+
+            $transaction = Transaction::create([
+                'invoice_no' => 'INV-' . now()->format('YmdHis'),
+                'cashier_id' => $cashierId,
+                'total' => $total,
+                'paid' => $request->paid,
+                'change' => $request->paid - $total,
+                'payment_method' => $request->payment_method,
+            ]);
+            
+            $transactionId = $transaction->id; // Simpan ID transaksi
+
+            foreach ($cart as $item) {
+                TransactionItem::create([
+                    'transaction_id' => $transaction->id,
+                    'product_id' => $item['product_id'],
+                    'qty' => $item['qty'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+
+                // kurangi stok
+                Products::where('id', $item['product_id'])
+                    ->decrement('stock', $item['qty']);
+            }
+        });
+
+        session()->forget('cart');
+
+        // ✅ PERUBAHAN DI SINI: Redirect ke halaman detail transaksi
+        return redirect()->route('transactions.show', $transactionId)
+            ->with('success', 'Transaksi berhasil disimpan!');
+    }
 
     /**
      * Display the specified resource.
